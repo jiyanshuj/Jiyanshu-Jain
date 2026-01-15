@@ -25,17 +25,17 @@ const Hero: React.FC = () => {
 
       {/* Animated circles */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
+        <motion.div
           className="absolute -top-20 -left-20 w-72 h-72 bg-blue-200 dark:bg-blue-500 rounded-full mix-blend-multiply dark:mix-blend-color-dodge opacity-30 dark:opacity-20"
           animate={{ x: [0, 30, 0], y: [0, 50, 0], scale: [1, 1.2, 1] }}
           transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
         />
-        <motion.div 
+        <motion.div
           className="absolute top-40 -right-20 w-96 h-96 bg-purple-200 dark:bg-purple-500 rounded-full mix-blend-multiply dark:mix-blend-color-dodge opacity-30 dark:opacity-20"
           animate={{ x: [0, -50, 0], y: [0, 30, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
         />
-        <motion.div 
+        <motion.div
           className="absolute -bottom-40 left-1/3 w-80 h-80 bg-teal-200 dark:bg-teal-500 rounded-full mix-blend-multiply dark:mix-blend-color-dodge opacity-30 dark:opacity-20"
           animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.15, 1] }}
           transition={{ duration: 18, repeat: Infinity, repeatType: "reverse" }}
@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col lg:flex-row items-center justify-center gap-12">
-        <motion.div 
+        <motion.div
           className="lg:w-1/2 text-center lg:text-left"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ const Hero: React.FC = () => {
             A passionate <span className="font-semibold text-blue-600 dark:text-blue-400">{typingText}<span className="animate-blink">|</span></span> crafting beautiful digital experiences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <motion.a 
+            <motion.a
               href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -66,8 +66,8 @@ const Hero: React.FC = () => {
             >
               Contact Me
             </motion.a>
-            <motion.a 
-              href="https://drive.google.com/file/d/1ZXc1bIfiEZhfpSL9Lz2ldcGN6KT4Pw26/view?usp=sharing"
+            <motion.a
+              href="https://drive.google.com/file/d/17e5tSxGjZknRC9rvhHazbPtDpYg-apsQ/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
@@ -81,16 +81,16 @@ const Hero: React.FC = () => {
 
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="lg:w-1/2 flex justify-center"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-xl">
-            <img 
+            <img
               src="/pic.png"
-              alt="Jiyanshu Jain" 
+              alt="Jiyanshu Jain"
               className="w-full h-full object-cover object-center"
             />
           </div>
