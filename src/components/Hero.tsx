@@ -67,7 +67,7 @@ const Hero: React.FC = () => {
               Contact Me
             </motion.a>
             <motion.a
-              href="https://drive.google.com/file/d/17e5tSxGjZknRC9rvhHazbPtDpYg-apsQ/view?usp=sharing"
+              href="https://drive.google.com/file/d/1OUIlZIIZFvnhvsNnl2FxfpIFOzOWQ_u1/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
