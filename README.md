@@ -58,8 +58,8 @@ A modern, responsive portfolio website showcasing work in machine learning, web 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/jiyanshuj/portfolio.git
-cd portfolio
+git clone https://github.com/jiyanshuj/jiyanshu.git
+cd jiyanshu
 ```
 
 2. Install dependencies:
@@ -118,7 +118,7 @@ npm run lint
 ## 📁 Project Structure
 
 ```
-portfolio/
+jiyanshu/
 ├── public/                          # Static assets
 │   └── images/                      # Image files
 ├── src/
