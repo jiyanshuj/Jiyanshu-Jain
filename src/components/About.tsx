@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Code, Award, GraduationCap } from 'lucide-react';
+import { Code, Award, GraduationCap, Sparkles } from 'lucide-react';
 
 const About: React.FC = () => {
   const [ref, inView] = useInView({
@@ -15,8 +15,13 @@ const About: React.FC = () => {
   };
 
   return (
-    <section id="about" ref={ref} className="py-20 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="about" ref={ref} className="relative overflow-hidden bg-transparent py-24">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_55%_at_50%_-15%,rgba(50,59,130,0.32),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:42px_42px] opacity-35" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
         <motion.div
           variants={variants}
           initial="hidden"
@@ -24,9 +29,13 @@ const About: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
-          <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
-          <p className="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300">
+          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
+            <Sparkles size={14} />
+            Quick Intro
+          </div>
+          <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">About Me</h2>
+          <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+          <p className="mx-auto max-w-3xl text-lg text-zinc-400">
             I'm a passionate developer with a strong foundation in machine learning, web development, and software engineering.
             I love turning complex problems into elegant solutions.
           </p>
@@ -38,15 +47,15 @@ const About: React.FC = () => {
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-md"
+            className="cert-card rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
           >
             <div className="flex items-center mb-4">
-              <div className="p-3 bg-blue-100 dark:bg-dark-700 rounded-md text-blue-600 dark:text-blue-400 mr-4">
+              <div className="mr-4 rounded-md border border-white/15 bg-white/[0.08] p-3 text-[#00a4ef]">
                 <Code size={24} />
               </div>
-              <h3 className="text-xl font-semibold">Technical Skills</h3>
+              <h3 className="text-xl font-semibold text-zinc-100">Technical Skills</h3>
             </div>
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-zinc-400">
               Proficient in Python, machine learning, and web development. Experienced in building AI-powered applications and full-stack web solutions.
             </p>
           </motion.div>
@@ -56,15 +65,15 @@ const About: React.FC = () => {
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-md"
+            className="cert-card rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
           >
             <div className="flex items-center mb-4">
-              <div className="p-3 bg-blue-100 dark:bg-dark-700 rounded-md text-blue-600 dark:text-blue-400 mr-4">
+              <div className="mr-4 rounded-md border border-white/15 bg-white/[0.08] p-3 text-[#00a4ef]">
                 <Award size={24} />
               </div>
-              <h3 className="text-xl font-semibold">Certifications</h3>
+              <h3 className="text-xl font-semibold text-zinc-100">Certifications</h3>
             </div>
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-zinc-400">
               Microsoft Learn Certified in AI workloads and machine learning. Completed intensive Python programming course with focus on practical applications.
             </p>
           </motion.div>
@@ -74,15 +83,15 @@ const About: React.FC = () => {
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-md"
+            className="cert-card rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
           >
             <div className="flex items-center mb-4">
-              <div className="p-3 bg-blue-100 dark:bg-dark-700 rounded-md text-blue-600 dark:text-blue-400 mr-4">
+              <div className="mr-4 rounded-md border border-white/15 bg-white/[0.08] p-3 text-[#00a4ef]">
                 <GraduationCap size={24} />
               </div>
-              <h3 className="text-xl font-semibold">Education</h3>
+              <h3 className="text-xl font-semibold text-zinc-100">Education</h3>
             </div>
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-zinc-400">
               Currently pursuing Computer Science with specialization in AI and machine learning. Active participant in technical events and hackathons.
             </p>
           </motion.div>

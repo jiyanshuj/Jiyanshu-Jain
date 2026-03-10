@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Sparkles } from 'lucide-react';
 
 type Skill = {
   name: string;
@@ -23,12 +24,12 @@ const Skills: React.FC = () => {
     { name: 'PHP', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg', category: 'languages' },
     { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', category: 'languages' },
     { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg', category: 'languages' },
-    
+
     // Frameworks & Libraries
     { name: 'Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', category: 'frameworks' },
     { name: 'Flask', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original-wordmark.svg', category: 'frameworks' },
     { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg', category: 'frameworks' },
-    
+
     // Tools & Technologies
     { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', category: 'tools' },
     { name: 'GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', category: 'tools' },
@@ -51,17 +52,26 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" ref={ref} className="py-20 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="skills" ref={ref} className="relative overflow-hidden bg-transparent py-24">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_55%_at_50%_-15%,rgba(50,59,130,0.32),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:42px_42px] opacity-35" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">My Skills</h2>
-          <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
-          <p className="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300">
+          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
+            <Sparkles size={14} />
+            Core Capabilities
+          </div>
+          <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">My Skills</h2>
+          <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+          <p className="mx-auto max-w-3xl text-lg text-zinc-400">
             I've developed a diverse skill set across multiple technologies and domains. Here's an overview of my technical expertise and capabilities.
           </p>
         </motion.div>
@@ -75,18 +85,18 @@ const Skills: React.FC = () => {
             {[...skills, ...skills].map((skill, index) => (
               <motion.div
                 key={`${skill.name}-${index}`}
-                className="flex flex-col items-center justify-center min-w-[100px] p-4"
+                className="cert-card flex min-w-[110px] flex-col items-center justify-center rounded-xl p-4"
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="w-12 h-12 mb-3 bg-white dark:bg-gray-800 rounded-lg p-2">
+                <div className="mb-3 h-12 w-12 rounded-lg border border-white/15 bg-white/[0.08] p-2">
                   <img
                     src={skill.icon}
                     alt={skill.name}
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                <span className="text-sm font-medium text-zinc-200">
                   {skill.name}
                 </span>
               </motion.div>
@@ -114,9 +124,9 @@ const Skills: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="p-4 text-center bg-gray-50 dark:bg-dark-800 rounded-lg"
+              className="cert-card rounded-xl p-4 text-center transition-colors hover:border-white/20"
             >
-              <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+              <span className="text-sm font-medium text-zinc-200">
                 {skill}
               </span>
             </motion.div>

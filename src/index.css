@@ -1,3 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --cert-bg: #0a0a0f;
+    --cert-text: #f3f4f6;
+    --cert-muted: #9ca3af;
+    --cert-soft: #6b7280;
+    --cert-panel: rgba(255, 255, 255, 0.04);
+    --cert-panel-border: rgba(255, 255, 255, 0.08);
+    --cert-panel-strong: rgba(255, 255, 255, 0.06);
+}
+
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
+body {
+    background: var(--cert-bg);
+    color: var(--cert-text);
+    font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+}
+
+.cert-theme-shell {
+    position: relative;
+    overflow: hidden;
+    background: var(--cert-bg);
+    color: var(--cert-text);
+}
+
+.cert-theme-shell::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, #1a1a3e 0%, transparent 70%);
+}
+
+.cert-theme-shell::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.cert-title {
+    font-family: 'Syne', sans-serif;
+    letter-spacing: -0.03em;
+}
+
+.cert-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--cert-panel-border);
+    background: var(--cert-panel);
+    color: var(--cert-soft);
+}
+
+.cert-card {
+    border: 1px solid var(--cert-panel-border);
+    background: var(--cert-panel);
+    backdrop-filter: blur(8px);
+}

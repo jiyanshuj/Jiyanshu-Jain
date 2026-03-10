@@ -2,34 +2,31 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const LoadingScreen: React.FC = () => {
-  // Dynamic Colors Array for Gradient Animation
-  const gradientColors = [
-    'from-pink-500 to-yellow-500',
-    'from-blue-500 to-purple-500',
-    'from-green-400 to-blue-500',
-    'from-indigo-500 to-pink-500',
-  ];
-
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#0a0a0f]"
     >
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_50%_-12%,rgba(44,53,120,0.4),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
+      </div>
+
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-gradient-to-r from-pink-500 to-yellow-500 opacity-40 rounded-full"
+            className="absolute h-2 w-2 rounded-full bg-cyan-300/40"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: `${Math.random() * 100}%`,
+              y: `${Math.random() * 100}%`,
             }}
             animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: `${Math.random() * 100}%`,
+              y: `${Math.random() * 100}%`,
             }}
             transition={{
               duration: Math.random() * 10 + 10,
@@ -48,9 +45,12 @@ const LoadingScreen: React.FC = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-8"
         >
+          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em]">
+            Initializing Portfolio
+          </div>
           <motion.h1
-            className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-500 to-yellow-500 bg-clip-text text-transparent animate-gradient"
-            animate={{ 
+            className="cert-title animate-gradient bg-gradient-to-r from-white via-[#7dd3fc] to-zinc-300 bg-clip-text text-4xl font-bold text-transparent md:text-6xl"
+            animate={{
               backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
             }}
             transition={{
@@ -69,7 +69,7 @@ const LoadingScreen: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-gray-600 dark:text-gray-400 mt-2"
+            className="mt-2 text-lg text-zinc-400"
           >
             Crafting Digital Experiences
           </motion.p>
@@ -84,21 +84,21 @@ const LoadingScreen: React.FC = () => {
         >
           {/* Outer Ring */}
           <motion.div
-            className="absolute inset-0 border-4 border-pink-200 dark:border-pink-800 rounded-full"
+            className="absolute inset-0 rounded-full border-4 border-white/15"
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           />
 
           {/* Inner Ring */}
           <motion.div
-            className="absolute inset-2 border-4 border-transparent border-t-yellow-500 border-r-pink-500 rounded-full"
+            className="absolute inset-2 rounded-full border-4 border-transparent border-r-[#00a4ef] border-t-[#7dd3fc]"
             animate={{ rotate: -360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
           />
 
           {/* Center Dot */}
           <motion.div
-            className="absolute inset-6 bg-gradient-to-r from-pink-500 to-yellow-500 rounded-full"
+            className="absolute inset-6 rounded-full bg-gradient-to-r from-[#00a4ef] to-[#7dd3fc]"
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.7, 1, 0.7]
@@ -115,7 +115,7 @@ const LoadingScreen: React.FC = () => {
           className="space-y-2"
         >
           <motion.p
-            className="text-gray-600 dark:text-gray-400 text-sm font-medium"
+            className="text-sm font-medium text-zinc-400"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -123,9 +123,9 @@ const LoadingScreen: React.FC = () => {
           </motion.p>
 
           {/* Progress Bar */}
-          <div className="w-48 h-1 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto overflow-hidden">
+          <div className="mx-auto h-1 w-48 overflow-hidden rounded-full bg-white/10">
             <motion.div
-              className="h-full bg-gradient-to-r from-pink-500 to-yellow-500 rounded-full"
+              className="h-full rounded-full bg-gradient-to-r from-[#00a4ef] to-[#7dd3fc]"
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
               transition={{ duration: 2.5, ease: "easeInOut" }}
@@ -138,7 +138,7 @@ const LoadingScreen: React.FC = () => {
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-pink-500/40 rounded-full"
+              className="absolute h-1 w-1 rounded-full bg-cyan-300/40"
               style={{
                 left: `${20 + i * 15}%`,
                 top: `${30 + (i % 2) * 40}%`,

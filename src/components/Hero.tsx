@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Github, Linkedin, Download } from 'lucide-react';
+import { ChevronDown, Download } from 'lucide-react';
 import useTypingEffect from '../hooks/useTypingEffect';
 import ParticleBackground from './ParticleBackground';
 
@@ -20,23 +20,28 @@ const Hero: React.FC = () => {
   ]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-24 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-transparent pb-24 pt-16">
       <ParticleBackground />
+
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_50%_-12%,rgba(44,53,120,0.35),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
+      </div>
 
       {/* Animated circles */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-20 -left-20 w-72 h-72 bg-blue-200 dark:bg-blue-500 rounded-full mix-blend-multiply dark:mix-blend-color-dodge opacity-30 dark:opacity-20"
+          className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-2xl"
           animate={{ x: [0, 30, 0], y: [0, 50, 0], scale: [1, 1.2, 1] }}
           transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
         />
         <motion.div
-          className="absolute top-40 -right-20 w-96 h-96 bg-purple-200 dark:bg-purple-500 rounded-full mix-blend-multiply dark:mix-blend-color-dodge opacity-30 dark:opacity-20"
+          className="absolute -right-20 top-40 h-96 w-96 rounded-full bg-indigo-400/20 blur-2xl"
           animate={{ x: [0, -50, 0], y: [0, 30, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
         />
         <motion.div
-          className="absolute -bottom-40 left-1/3 w-80 h-80 bg-teal-200 dark:bg-teal-500 rounded-full mix-blend-multiply dark:mix-blend-color-dodge opacity-30 dark:opacity-20"
+          className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-rose-400/20 blur-2xl"
           animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.15, 1] }}
           transition={{ duration: 18, repeat: Infinity, repeatType: "reverse" }}
         />
@@ -49,20 +54,23 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+          <div className="cert-kicker mb-6 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em]">
+            Available For Projects
+          </div>
+          <h1 className="cert-title mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
+            <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               Jiyanshu Jain
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8">
-            A passionate <span className="font-semibold text-blue-600 dark:text-blue-400">{typingText}<span className="animate-blink">|</span></span> crafting beautiful digital experiences.
+          <p className="mb-8 text-xl text-zinc-400 md:text-2xl">
+            A passionate <span className="font-semibold text-[#00a4ef]">{typingText}<span className="animate-blink">|</span></span> crafting practical digital experiences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <motion.a
               href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+              className="rounded-xl border border-[#00a4ef]/40 bg-[#00a4ef]/20 px-8 py-3 font-medium text-white shadow-[0_18px_40px_-25px_rgba(0,164,239,0.65)] transition-colors hover:bg-[#00a4ef]/30"
             >
               Contact Me
             </motion.a>
@@ -72,7 +80,7 @@ const Hero: React.FC = () => {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 font-medium rounded-lg shadow-lg border border-blue-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
+              className="cert-card flex items-center gap-2 rounded-xl px-8 py-3 font-medium text-zinc-200 transition-colors hover:border-white/30 hover:bg-white/[0.08]"
             >
               <Download size={20} />
               Download Resume
@@ -87,7 +95,7 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-xl">
+          <div className="relative h-64 w-64 overflow-hidden rounded-full border-2 border-white/25 md:h-80 md:w-80">
             <img
               src="/pic.png"
               alt="Jiyanshu Jain"
@@ -99,7 +107,7 @@ const Hero: React.FC = () => {
 
       <motion.button
         onClick={scrollToAbout}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-zinc-500 transition-colors hover:text-[#00a4ef]"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 1.5, repeat: Infinity }}
         aria-label="Scroll down"

@@ -59,7 +59,7 @@ const ParticleBackground: React.FC = () => {
         // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
+        ctx.fillStyle = `rgba(0, 164, 239, ${particle.opacity})`;
         ctx.fill();
 
         // Draw connections
@@ -73,7 +73,7 @@ const ParticleBackground: React.FC = () => {
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
             const opacity = (100 - distance) / 100 * 0.2;
-            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+            ctx.strokeStyle = `rgba(0, 164, 239, ${opacity})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }

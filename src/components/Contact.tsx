@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Mail, Github, Linkedin, Heart } from 'lucide-react';
+import { Mail, Github, Linkedin, Heart, ArrowUpRight, Sparkles } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [ref, inView] = useInView({
@@ -11,28 +11,31 @@ const Contact: React.FC = () => {
 
   const socialLinks = [
     {
-      icon: <Github size={48} />,
+      icon: <Github size={34} />,
       title: 'GitHub',
-      subtitle: 'Check out my code',
+      subtitle: 'Explore projects and experiments',
       link: 'https://github.com/jiyanshuj',
-      color: 'hover:text-gray-800 dark:hover:text-white',
-      bgColor: 'hover:bg-gray-100 dark:hover:bg-gray-800'
+      accent: 'text-zinc-200',
+      ring: 'group-hover:border-zinc-400/40',
+      glow: 'group-hover:shadow-[0_0_40px_-20px_rgba(255,255,255,0.45)]',
     },
     {
-      icon: <Mail size={48} />,
+      icon: <Mail size={34} />,
       title: 'Email',
-      subtitle: 'Let\'s get in touch',
+      subtitle: 'Reach out for work or collaboration',
       link: 'mailto:jiyanshujain321@gmail.com',
-      color: 'hover:text-red-600 dark:hover:text-red-400',
-      bgColor: 'hover:bg-red-50 dark:hover:bg-red-900/20'
+      accent: 'text-rose-300',
+      ring: 'group-hover:border-rose-400/40',
+      glow: 'group-hover:shadow-[0_0_40px_-20px_rgba(244,63,94,0.65)]',
     },
     {
-      icon: <Linkedin size={48} />,
+      icon: <Linkedin size={34} />,
       title: 'LinkedIn',
-      subtitle: 'Connect with me',
+      subtitle: 'Connect professionally and network',
       link: 'https://www.linkedin.com/in/jiyanshu-jain',
-      color: 'hover:text-blue-600 dark:hover:text-blue-400',
-      bgColor: 'hover:bg-blue-50 dark:hover:bg-blue-900/20'
+      accent: 'text-cyan-300',
+      ring: 'group-hover:border-cyan-400/40',
+      glow: 'group-hover:shadow-[0_0_40px_-20px_rgba(34,211,238,0.65)]',
     },
   ];
 
@@ -48,40 +51,62 @@ const Contact: React.FC = () => {
 
   const itemVariants = {
     hidden: { y: 30, opacity: 0 },
-    visible: { 
-      y: 0, 
-      opacity: 1, 
-      transition: { 
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
         duration: 0.6,
         type: "spring",
         stiffness: 100
-      } 
+      }
     },
   };
 
   return (
-    <section id="contact" ref={ref} className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="contact" ref={ref} className="relative overflow-hidden bg-transparent py-24">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_-10%,rgba(48,56,125,0.35),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] backdrop-blur">
+            <Sparkles size={14} />
+            Get In Touch
+          </div>
+          <h2 className="cert-title mb-6 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
             Let's Connect
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
-          <p className="max-w-2xl mx-auto text-lg text-gray-700 dark:text-gray-300">
-            I enjoy working on new projects and building useful solutions.
+          <div className="mx-auto mb-8 h-px w-28 bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
+          <p className="mx-auto max-w-2xl text-base text-zinc-400 md:text-lg">
+            I enjoy building practical, impactful products. If you have an idea, opportunity, or challenge, I would love to collaborate.
           </p>
+
+          <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { label: 'Open To', value: 'Projects' },
+              { label: 'Preferred', value: 'Email' },
+              { label: 'Timezone', value: 'IST' },
+            ].map((stat) => (
+              <div key={stat.label} className="cert-card rounded-xl px-4 py-3">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-500">{stat.label}</p>
+                <p className="mt-1 text-sm font-semibold text-zinc-200">{stat.value}</p>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="flex flex-col md:flex-row justify-center items-center gap-8 mb-16"
+          className="mb-16 grid grid-cols-1 gap-5 md:grid-cols-3"
         >
           {socialLinks.map((social, index) => (
             <motion.a
@@ -90,22 +115,29 @@ const Contact: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               variants={itemVariants}
-              whileHover={{ 
-                scale: 1.05,
-                y: -5
+              whileHover={{
+                scale: 1.01,
+                y: -4
               }}
               whileTap={{ scale: 0.95 }}
-            className={`group flex flex-col items-center p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-lg transition-all duration-300 ${social.bgColor} min-w-[200px]`}
+              className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-7 text-left backdrop-blur-md transition-all duration-300 ${social.ring} ${social.glow}`}
             >
-              <div className={`mb-4 text-gray-600 dark:text-gray-400 transition-colors duration-300 ${social.color}`}>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-40" />
+              <div className={`mb-5 inline-flex rounded-xl border border-white/10 bg-white/[0.03] p-3 transition-colors ${social.accent}`}>
                 {social.icon}
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:scale-105 transition-transform">
+
+              <h3 className="mb-2 text-xl font-bold text-white">
                 {social.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+              <p className="mb-5 text-sm leading-relaxed text-zinc-400">
                 {social.subtitle}
               </p>
+
+              <div className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-300 transition-colors group-hover:text-white">
+                Reach out
+                <ArrowUpRight size={16} />
+              </div>
             </motion.a>
           ))}
         </motion.div>
@@ -116,36 +148,26 @@ const Contact: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center"
         >
-          <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border border-gray-100 dark:border-gray-700">
+          <div className="cert-card mx-auto max-w-2xl rounded-3xl p-8">
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.1, 1],
               }}
-              transition={{ 
+              transition={{
                 duration: 2,
                 repeat: Infinity,
                 repeatType: "reverse"
               }}
               className="mb-4"
             >
-              <Heart size={40} className="text-red-500 mx-auto" />
+              <Heart size={34} className="mx-auto text-rose-400" />
             </motion.div>
-            <h3 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-red-500 bg-clip-text text-transparent">
+            <h3 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
               Thank You!
             </h3>
-            <motion.div
-              className="mt-6 flex justify-center"
-              animate={{ 
-                rotate: [0, 10, -10, 0],
-              }}
-              transition={{ 
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <span className="text-4xl">🚀</span>
-            </motion.div>
+            <p className="mx-auto max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+              Thanks for visiting my portfolio. I am always up for meaningful conversations, cool ideas, and building something valuable together.
+            </p>
           </div>
         </motion.div>
       </div>

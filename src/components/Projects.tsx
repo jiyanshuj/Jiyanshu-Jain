@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Github, Brain, Activity, GraduationCap, FileText, Presentation, Compass } from 'lucide-react';
+import { ExternalLink, Github, Brain, Activity, GraduationCap, FileText, Presentation, Compass, Sparkles } from 'lucide-react';
 
 type Project = {
   id: number;
@@ -242,17 +242,17 @@ const Projects: React.FC = () => {
   const filteredProjects = activeFilter === 'All'
     ? projects
     : projects.filter(project => {
-        if (activeFilter === 'Web Apps') {
-          return ['Web Development', 'Full Stack', 'TypeScript'].some(tag => project.tags.includes(tag));
-        }
-        if (activeFilter === 'AI/ML') {
-          return ['AI', 'Machine Learning', 'Python', 'Healthcare', 'Education', 'Presentation', 'Productivity', 'Career Guidance', 'EdTech', 'Exam Automation', 'Campus Management', 'Cloud Computing'].some(tag => project.tags.includes(tag));
-        }
-        if (activeFilter === 'APIs') {
-          return project.technologies.includes('APIs') || project.technologies.includes('REST API');
-        }
-        return false;
-      });
+      if (activeFilter === 'Web Apps') {
+        return ['Web Development', 'Full Stack', 'TypeScript'].some(tag => project.tags.includes(tag));
+      }
+      if (activeFilter === 'AI/ML') {
+        return ['AI', 'Machine Learning', 'Python', 'Healthcare', 'Education', 'Presentation', 'Productivity', 'Career Guidance', 'EdTech', 'Exam Automation', 'Campus Management', 'Cloud Computing'].some(tag => project.tags.includes(tag));
+      }
+      if (activeFilter === 'APIs') {
+        return project.technologies.includes('APIs') || project.technologies.includes('REST API');
+      }
+      return false;
+    });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -270,17 +270,28 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" ref={ref} className="py-20 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="projects" ref={ref} className="relative overflow-hidden bg-transparent py-24">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_-15%,rgba(52,60,130,0.34),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:42px_42px] opacity-35" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">My Projects</h2>
-          <div className="w-20 h-1 bg-blue-500 mx-auto mb-8"></div>
-          <p className="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300 mb-8">
+          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
+            <Sparkles size={14} />
+            Featured Work
+          </div>
+          <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
+            My Projects
+          </h2>
+          <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+          <p className="mx-auto mb-8 max-w-3xl text-lg text-zinc-400">
             Here are some of my notable projects that showcase my skills in machine learning, web development, and problem-solving.
           </p>
 
@@ -289,9 +300,9 @@ const Projects: React.FC = () => {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeFilter === filter
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-dark-800 dark:text-gray-200 dark:hover:bg-dark-700'
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${activeFilter === filter
+                  ? 'border-[#00a4ef]/45 bg-[#00a4ef]/18 text-[#7dd3fc] shadow-[0_10px_30px_-18px_rgba(0,164,239,0.9)]'
+                  : 'cert-card text-zinc-400 hover:border-white/25 hover:text-zinc-200'
                   }`}
               >
                 {filter}
@@ -310,7 +321,7 @@ const Projects: React.FC = () => {
             <motion.div
               key={project.id}
               variants={itemVariants}
-              className="group relative h-64 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+              className="group cert-card relative h-72 overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
             >
               <img
                 src={project.image}
@@ -318,22 +329,22 @@ const Projects: React.FC = () => {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030305]/95 via-[#040507]/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
                 <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                  <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-                  <p className="text-sm text-gray-200 mb-4 line-clamp-2">{project.description}</p>
+                  <h3 className="mb-2 text-xl font-bold text-zinc-100">{project.title}</h3>
+                  <p className="mb-4 line-clamp-2 text-sm text-zinc-300">{project.description}</p>
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.slice(0, 3).map((tech, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 text-xs font-medium bg-white/20 text-white rounded-full"
+                        className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.technologies.length > 3 && (
-                      <span className="px-2 py-1 text-xs font-medium bg-white/20 text-white rounded-full">
+                      <span className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100">
                         +{project.technologies.length - 3}
                       </span>
                     )}
@@ -344,7 +355,7 @@ const Projects: React.FC = () => {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 px-3 py-1 bg-white/90 text-gray-900 rounded text-sm font-medium hover:bg-white transition-colors"
+                      className="flex items-center gap-1 rounded-md border border-white/20 bg-white/[0.12] px-3 py-1 text-sm font-medium text-zinc-100 transition-colors hover:bg-white/[0.18]"
                     >
                       <Github size={14} />
                       <span>Code</span>
@@ -354,7 +365,7 @@ const Projects: React.FC = () => {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 px-3 py-1 bg-blue-500/90 text-white rounded text-sm font-medium hover:bg-blue-500 transition-colors"
+                        className="flex items-center gap-1 rounded-md border border-[#00a4ef]/35 bg-[#00a4ef]/15 px-3 py-1 text-sm font-medium text-[#7dd3fc] transition-colors hover:bg-[#00a4ef]/25"
                       >
                         <ExternalLink size={14} />
                         <span>Demo</span>
@@ -364,7 +375,7 @@ const Projects: React.FC = () => {
                 </div>
               </div>
 
-              <div className="absolute top-4 right-4 p-2 bg-white/90 rounded-full text-blue-600">
+              <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-white/[0.13] p-2 text-[#7dd3fc] backdrop-blur">
                 {project.icon}
               </div>
             </motion.div>

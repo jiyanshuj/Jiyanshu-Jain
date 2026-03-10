@@ -36,34 +36,35 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header 
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm py-3 shadow-sm' : 'bg-transparent py-6'
-      }`}
+    <header
+      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled
+        ? 'border-b border-white/10 bg-[#0a0a0f]/80 py-3 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.9)] backdrop-blur-md'
+        : 'bg-transparent py-6'
+        }`}
     >
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent"
+          className="cert-title bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-2xl font-bold text-transparent"
         >
           JJ
         </motion.div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <motion.ul 
+          <motion.ul
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, staggerChildren: 0.1 }}
             className="flex space-x-8"
           >
             {navLinks.map((link) => (
-              <motion.li 
+              <motion.li
                 key={link.id}
                 whileHover={{ y: -2 }}
-                className="font-medium text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400 cursor-pointer"
+                className="cursor-pointer font-medium text-zinc-400 transition-colors hover:text-[#7dd3fc]"
                 onClick={() => scrollToSection(link.id)}
               >
                 {link.name}
@@ -71,7 +72,7 @@ const Header: React.FC = () => {
             ))}
           </motion.ul>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -85,7 +86,7 @@ const Header: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -3, scale: 1.1 }}
-                className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+                className="rounded-lg border border-transparent p-2 text-zinc-400 transition-all hover:border-white/10 hover:bg-white/[0.05] hover:text-[#7dd3fc]"
               >
                 {link.icon}
               </motion.a>
@@ -94,8 +95,8 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-gray-700 dark:text-gray-200" 
+        <button
+          className="md:hidden text-zinc-300"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -105,18 +106,18 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-white dark:bg-gray-900 shadow-lg"
+          className="md:hidden border-t border-white/10 bg-[#0a0a0f]/95 shadow-[0_18px_50px_-25px_rgba(0,0,0,0.95)] backdrop-blur-md"
         >
           <div className="container mx-auto px-4 py-4">
             <ul className="space-y-4">
               {navLinks.map((link) => (
                 <li key={link.id}>
                   <button
-                    className="w-full text-left py-2 font-medium text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400"
+                    className="w-full py-2 text-left font-medium text-zinc-300 transition-colors hover:text-[#7dd3fc]"
                     onClick={() => scrollToSection(link.id)}
                   >
                     {link.name}
@@ -124,7 +125,7 @@ const Header: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex items-center space-x-6 mt-6 pt-4 border-t border-gray-200 dark:border-dark-700">
+            <div className="mt-6 flex items-center space-x-4 border-t border-white/10 pt-4">
               {socialLinks.map((link, index) => (
                 <a
                   key={index}
@@ -132,7 +133,7 @@ const Header: React.FC = () => {
                   aria-label={link.label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+                  className="rounded-lg border border-white/10 bg-white/[0.04] p-2 text-zinc-400 transition-colors hover:text-[#7dd3fc]"
                 >
                   {link.icon}
                 </a>
