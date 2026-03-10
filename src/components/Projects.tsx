@@ -182,7 +182,7 @@ const Projects: React.FC = () => {
       title: 'Student Campus Cloud Network',
       description:
         'AI-powered campus management ecosystem — 8 production apps with face recognition attendance (KNN), AI notes/PPT/exam generation via Gemini, social forum (FORAM), e-library, fee payment, and e-canteen across 4 role-based panels.',
-      image: 'public/images/Student-Campus-Cloud-Network.png',
+      image: '/images/Student-Campus-Cloud-Network.png',
       tags: ['AI', 'Full Stack', 'Campus Management'],
       technologies: ['React.js', 'FastAPI', 'Gemini API', 'Supabase', 'PostgreSQL', 'KNN', 'OpenCV'],
       githubUrl: 'https://github.com/jiyanshuj/Major-project',
@@ -194,7 +194,7 @@ const Projects: React.FC = () => {
       title: 'Smart Career Guidance System',
       description:
         'AI-driven career assessment platform with adaptive quizzes across 6 CS domains (OS, DBMS, Networks, Aptitude, Verbal, Programming), Gemini-generated questions, and a performance analytics dashboard.',
-      image: 'public/images/Smart-Career-Guidance-System.png',
+      image: '/images/Smart-Career-Guidance-System.png',
       tags: ['AI', 'EdTech', 'Full Stack'],
       technologies: ['React.js', 'TypeScript', 'Flask', 'Clerk', 'Supabase', 'Gemini API', 'REST API'],
       githubUrl: 'https://github.com/jiyanshuj/Smart-Career-Guidance-System',
@@ -206,7 +206,7 @@ const Projects: React.FC = () => {
       title: 'AutoSlideX',
       description:
         'AI presentation generator — enter a topic and slide count, Gemini creates structured content with professional layouts, context-aware image fetching, and exports to PowerPoint (.pptx).',
-      image: 'public/images/AutoSlideX.png',
+      image: '/images/AutoSlideX.png',
       tags: ['AI', 'Productivity'],
       technologies: ['React', 'FastAPI', 'Python', 'Gemini API', 'Google Custom Search API', 'python-pptx'],
       githubUrl: 'https://github.com/jiyanshuj/AutoSlideX',
@@ -218,7 +218,7 @@ const Projects: React.FC = () => {
       title: 'PaperVista',
       description:
         'AI exam paper generator for educators. Supports MST-1, MST-2, and End-Semester formats with configurable difficulty, topic-based Gemini question generation, and print-ready university-style output.',
-      image: 'public/images/PaperVista.png',
+      image: '/images/PaperVista.png',
       tags: ['AI', 'EdTech'],
       technologies: ['React', 'FastAPI', 'Python', 'Gemini API', 'Pydantic', 'REST API'],
       githubUrl: 'https://github.com/jiyanshuj/PaperVista',
@@ -230,7 +230,7 @@ const Projects: React.FC = () => {
       title: 'HealthGuard AI',
       description:
         "ML app predicting risk for Diabetes, Coronary Heart Disease, and Parkinson's using pre-trained models. Auto-trains on UCI datasets with confidence levels and personalised health recommendations.",
-      image: 'public/images/Health-Guard-AI.png',
+      image: '/images/Health-Guard-AI.png',
       tags: ['Machine Learning', 'Healthcare', 'Python'],
       technologies: ['Python', 'Streamlit', 'scikit-learn', 'Pandas', 'NumPy'],
       githubUrl: 'https://github.com/jiyanshuj/Health-Guard-AI',
@@ -242,7 +242,7 @@ const Projects: React.FC = () => {
       title: 'NextStep CV',
       description:
         'ATS-optimized AI resume builder with multi-section form, real-time preview, Gemini AI content optimization, and export to PDF & Word (.docx).',
-      image: 'public/images/NextStep-CV.png',
+      image: '/images/NextStep-CV.png',
       tags: ['Full Stack', 'AI'],
       technologies: ['React', 'TypeScript', 'Flask', 'Gemini API', 'python-docx', 'Tailwind CSS'],
       githubUrl: 'https://github.com/jiyanshuj/Resume-Gen',
@@ -254,7 +254,7 @@ const Projects: React.FC = () => {
       title: 'Resume Parser API',
       description:
         'FastAPI backend powering the job seeker app — parses uploaded PDF/DOCX resumes with Gemini AI, extracts structured profile data, handles Cloudinary file hosting, and stores results in MongoDB.',
-      image: 'public/images/Resume-Parser-API.png',
+      image: '/images/Resume-Parser-API.png',
       tags: ['API', 'AI', 'Python'],
       technologies: ['FastAPI', 'Python', 'Gemini AI', 'MongoDB', 'Cloudinary', 'PyPDF2', 'Pydantic'],
       githubUrl: 'https://github.com/jiyanshuj/resume-parse',
@@ -267,7 +267,7 @@ const Projects: React.FC = () => {
       title: 'Skills Bridge Platform',
       description:
         'Career upskilling platform with AI-powered learning paths, Langflow video analysis chatbot, user dashboard, partner portal, admin panel, and multi-method auth (Email, GitHub, Google OAuth).',
-      image: 'public/images/Skills-Bridge-Platform.png',
+      image: '/images/Skills-Bridge-Platform.png',
       tags: ['AI', 'EdTech', 'Full Stack'],
       technologies: ['React', 'TypeScript', 'Firebase', 'Langflow AI', 'Google OAuth', 'Tailwind CSS'],
       githubUrl: 'https://github.com/jiyanshuj/Skills-Bridge-Platform',
@@ -279,7 +279,7 @@ const Projects: React.FC = () => {
       title: 'Visnex Global',
       description:
         'AI-powered startup ecosystem platform connecting founders, investors, incubators, and partners. Features AI-driven matching, startup discovery, investor search, and real-time stats across 120+ countries.',
-      image: 'public/images/Visnex-Global.png',
+      image: '/images/Visnex-Global.png',
       tags: ['Full Stack', 'Web Development'],
       technologies: ['React', 'JavaScript', 'Python', 'Vercel'],
       githubUrl: 'https://github.com/jiyanshuj/Visnex-Global',
@@ -303,7 +303,7 @@ const Projects: React.FC = () => {
       title: 'Job Seeker App',
       description:
         'React Native mobile app with swipe-based job matching, AI match scoring, salary range filters, saved jobs, and resume upload with AI parsing and Cloudinary storage.',
-      image: 'public/images/Job-Seeker-App.jpeg',
+      image: '/images/Job-Seeker-App.jpeg',
       tags: ['Mobile', 'Full Stack'],
       technologies: ['React Native', 'Expo', 'TypeScript', 'REST API'],
       githubUrl: 'https://github.com/jiyanshuj/job-seekr-app',
