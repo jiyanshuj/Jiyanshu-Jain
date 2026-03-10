@@ -162,11 +162,11 @@ const Contact: React.FC = () => {
             >
               <Heart size={34} className="mx-auto text-rose-400" />
             </motion.div>
-            <h3 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
-              Thank You!
+            <h3 className="cert-title mx-auto mb-4 max-w-xl bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-2xl font-bold leading-tight text-transparent md:text-3xl">
+              "Build what matters. Make it useful. Keep it human."
             </h3>
-            <p className="mx-auto max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
-              Thanks for visiting my portfolio. I am always up for meaningful conversations, cool ideas, and building something valuable together.
+            <p className="mx-auto max-w-xl text-xs leading-relaxed text-zinc-400 md:text-sm">
+              I love collaborating on ideas that solve real problems and create measurable impact.
             </p>
           </div>
         </motion.div>
