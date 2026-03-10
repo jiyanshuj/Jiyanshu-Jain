@@ -64,6 +64,7 @@ function CertCard({ cert, index, visible, color }: { cert: Cert; index: number; 
       overflow: "hidden",
       backdropFilter: "blur(8px)",
       textAlign: "left",
+      boxShadow: "0 18px 42px -34px rgba(0,0,0,0.88), inset 0 1px 0 rgba(255,255,255,0.03)",
     }}>
       {/* top shimmer */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(90deg,transparent,${color}55,transparent)` }} />
@@ -120,7 +121,13 @@ export default function CertificateShowcase() {
   }, [cardsVisible]);
 
   return (
-    <section id="certifications" style={{ padding: "80px 20px", color: "#fff" }}>
+    <section id="certifications" style={{ padding: "80px 20px", color: "#fff", position: "relative" }}>
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        background: "radial-gradient(ellipse 70% 55% at 50% -15%, rgba(0,164,239,0.16), transparent 70%)",
+      }} />
       <div style={{ maxWidth: "860px", margin: "0 auto", position: "relative", zIndex: 1 }}>
 
         {/* ── Header ── */}
@@ -147,7 +154,16 @@ export default function CertificateShowcase() {
           {/* stats */}
           <div style={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: "36px", flexWrap: "wrap" }}>
             {[{ label: "Total Certs", value: certData.length }, { label: "Organizations", value: orgList.length }, { label: "Latest", value: "2025" }].map(s => (
-              <div key={s.label} className="cert-card" style={{ textAlign: "center", padding: "14px 24px", borderRadius: "12px" }}>
+              <div
+                key={s.label}
+                className="cert-card"
+                style={{
+                  textAlign: "center",
+                  padding: "14px 24px",
+                  borderRadius: "12px",
+                  boxShadow: "0 16px 36px -30px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.03)",
+                }}
+              >
                 <div style={{ fontSize: "26px", fontWeight: 700, color: "#fff", fontFamily: "'Syne',sans-serif" }}>{s.value}</div>
                 <div style={{ fontSize: "11px", color: "#6b7280", marginTop: "2px" }}>{s.label}</div>
               </div>
@@ -196,6 +212,7 @@ export default function CertificateShowcase() {
                     (e.currentTarget as HTMLButtonElement).style.borderColor = color + "80";
                     (e.currentTarget as HTMLButtonElement).style.color = "#fff";
                     (e.currentTarget as HTMLButtonElement).style.background = `${color}12`;
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 10px 24px -18px ${color}aa`;
                   }
                 }}
                 onMouseLeave={e => {
@@ -203,6 +220,7 @@ export default function CertificateShowcase() {
                     (e.currentTarget as HTMLButtonElement).style.borderColor = color + "40";
                     (e.currentTarget as HTMLButtonElement).style.color = "#9ca3af";
                     (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)";
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
                   }
                 }}
               >
@@ -261,6 +279,10 @@ export default function CertificateShowcase() {
             overflow: "hidden",
             maxHeight: cardsVisible && activeData ? `${activeData.certs.length * 200}px` : "0px",
             opacity: cardsVisible ? 1 : 0,
+            borderRadius: "14px",
+            padding: cardsVisible ? "6px" : "0px",
+            background: cardsVisible ? "rgba(255,255,255,0.02)" : "transparent",
+            boxShadow: cardsVisible ? "0 30px 60px -44px rgba(0,0,0,0.9)" : "none",
             transition: "max-height 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease",
           }}
         >
@@ -294,7 +316,16 @@ export default function CertificateShowcase() {
         )}
 
         {/* ── Footer ── */}
-        <div className="cert-card" style={{ marginTop: "72px", textAlign: "center", padding: "28px 32px", borderRadius: "16px" }}>
+        <div
+          className="cert-card"
+          style={{
+            marginTop: "72px",
+            textAlign: "center",
+            padding: "28px 32px",
+            borderRadius: "16px",
+            boxShadow: "0 20px 48px -36px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.03)",
+          }}
+        >
           <p style={{ margin: 0, fontSize: "14px", color: "#6b7280", lineHeight: 1.7 }}>
             Committed to continuous learning and professional growth across cloud, AI, data science, and software development.
           </p>

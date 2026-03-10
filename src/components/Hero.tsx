@@ -5,9 +5,9 @@ import useTypingEffect from '../hooks/useTypingEffect';
 import ParticleBackground from './ParticleBackground';
 
 const stats = [
-  { icon: <Code2 size={14} />, label: "Projects", value: "10+" },
-  { icon: <Award size={14} />, label: "Certifications", value: "21" },
-  { icon: <Brain size={14} />, label: "Oracle Certified", value: "OCI 2025" },
+  { icon: <Code2 size={14} />, label: "Open Source Repos", value: "20+" },
+  { icon: <Award size={14} />, label: "Live Products", value: "8+" },
+  { icon: <Brain size={14} />, label: "AI/ML Solutions", value: "10+" },
 ];
 
 const Hero: React.FC = () => {
@@ -19,10 +19,10 @@ const Hero: React.FC = () => {
   };
 
   const typingText = useTypingEffect([
-    'Web Developer',
-    'AI-ML Enthusiast',
-    'Problem Solver',
-    'Full-Stack Developer',
+    'AI Product Engineer',
+    'Full-Stack Developer (React + FastAPI/Flask)',
+    'ML Builder (Computer Vision + NLP)',
+    'Cloud-Ready App Developer',
     'Data Science Intern @ EY',
   ]);
 
@@ -84,12 +84,13 @@ const Hero: React.FC = () => {
             </span>
           </p>
 
-          {/* Short bio based on actual projects */}
+          {/* Portfolio-aligned summary */}
           <p className="mb-8 text-sm text-zinc-500 leading-relaxed max-w-md mx-auto lg:mx-0">
-            Building AI-powered tools, data pipelines, and full-stack apps — from an{' '}
-            <span className="text-zinc-300">EV charging optimizer</span> to a{' '}
-            <span className="text-zinc-300">PPT Generator</span> powered by the{' '}
-            <span className="text-zinc-300">Gemini API</span>.
+            Building AI-first products in <span className="text-zinc-300">EdTech</span>,{' '}
+            <span className="text-zinc-300">CareerTech</span>, and <span className="text-zinc-300">Health AI</span>.
+            Highlights: <span className="text-zinc-300">NEURO CAMPUS</span>,{' '}
+            <span className="text-zinc-300">PaperVista</span>, <span className="text-zinc-300">AutoSlideX</span>, and{' '}
+            <span className="text-zinc-300">Resume Parser APIs</span>.
           </p>
 
           {/* CTA buttons */}
@@ -156,7 +157,7 @@ const Hero: React.FC = () => {
             {/* Photo circle */}
             <div className="relative h-64 w-64 overflow-hidden rounded-full border-2 border-white/20 md:h-80 md:w-80">
               <img
-                src="public/pic.png"
+                src="/Pic.png"
                 alt="Jiyanshu Jain"
                 className="w-full h-full object-cover"
                 style={{

@@ -36,8 +36,9 @@ const About: React.FC = () => {
           <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">About Me</h2>
           <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
           <p className="mx-auto max-w-3xl text-lg text-zinc-400">
-            I'm a passionate developer with a strong foundation in machine learning, web development, and software engineering.
-            I love turning complex problems into elegant solutions.
+            I build AI-enabled products that solve real problems across education, career growth, and productivity.
+            From full-stack platforms like NEURO CAMPUS to tools like PaperVista, AutoSlideX, and Resume Parser APIs,
+            I focus on shipping practical, scalable systems with clean user experiences.
           </p>
         </motion.div>
 
@@ -56,7 +57,8 @@ const About: React.FC = () => {
               <h3 className="text-xl font-semibold text-zinc-100">Technical Skills</h3>
             </div>
             <p className="text-zinc-400">
-              Proficient in Python, machine learning, and web development. Experienced in building AI-powered applications and full-stack web solutions.
+              Strong in React, TypeScript, Tailwind, Python, FastAPI, and Flask. Experienced with Supabase, MongoDB,
+              Cloudinary, and Gemini API integrations for production-ready AI workflows.
             </p>
           </motion.div>
 
@@ -74,7 +76,8 @@ const About: React.FC = () => {
               <h3 className="text-xl font-semibold text-zinc-100">Certifications</h3>
             </div>
             <p className="text-zinc-400">
-              Microsoft Learn Certified in AI workloads and machine learning. Completed intensive Python programming course with focus on practical applications.
+              Oracle and Microsoft certifications in cloud and AI learning paths, with hands-on delivery in resume parsing,
+              exam generation, career assessment, and facial-recognition attendance systems.
             </p>
           </motion.div>
 
@@ -92,7 +95,8 @@ const About: React.FC = () => {
               <h3 className="text-xl font-semibold text-zinc-100">Education</h3>
             </div>
             <p className="text-zinc-400">
-              Currently pursuing Computer Science with specialization in AI and machine learning. Active participant in technical events and hackathons.
+              B.Tech Computer Science (AI/ML focus), with major-project experience architecting multi-panel platforms,
+              integrating computer vision, and deploying end-to-end web products on Vercel/Render.
             </p>
           </motion.div>
         </div>
