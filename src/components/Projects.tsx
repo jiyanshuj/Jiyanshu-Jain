@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Github, Brain, Activity, GraduationCap, FileText, Presentation, Compass, Sparkles } from 'lucide-react';
+import { ExternalLink, Github, Brain, Activity, GraduationCap, FileText, Presentation, Compass, Sparkles, Globe, Smartphone, Shield } from 'lucide-react';
 
 type Project = {
   id: number;
@@ -9,264 +9,319 @@ type Project = {
   description: string;
   image: string;
   tags: string[];
-  features: string[];
   technologies: string[];
   githubUrl: string;
   liveUrl?: string;
   icon: React.ReactNode;
+  displayType?: 'phone';
 };
 
-const Projects: React.FC = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+const itemVariants = {
+  hidden: { y: 50, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
+};
 
+/* ─── Phone frame card ─── */
+const PhoneCard: React.FC<{ project: Project }> = ({ project }) => (
+  <motion.div
+    variants={itemVariants}
+    className="group cert-card relative h-80 overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
+  >
+    {/* dark bg so phone looks intentional */}
+    <div className="absolute inset-0 bg-gradient-to-br from-[#0d1117] via-[#0f1923] to-[#060b10]" />
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:28px_28px] opacity-35" />
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,rgba(0,164,239,0.09),transparent_70%)]" />
+
+    {/* centered phone mockup — visible by default, scales on hover */}
+    <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+      <div
+        className="relative rounded-[2rem] border-[3px] border-white/20 bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_60px_-10px_rgba(0,0,0,0.85)] overflow-hidden"
+        style={{ width: '148px', height: '272px' }}
+      >
+        {/* notch */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-4 bg-black rounded-b-xl z-20 flex items-center justify-center gap-1">
+          <div className="w-1 h-1 rounded-full bg-zinc-700" />
+          <div className="w-5 h-1.5 rounded-full bg-zinc-700" />
+        </div>
+        {/* screen */}
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover object-top"
+        />
+        {/* shine */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+      </div>
+
+      {/* side buttons */}
+      <div className="absolute rounded-r-full bg-white/15" style={{ left: 'calc(50% - 77px)', top: '88px', width: '3px', height: '22px' }} />
+      <div className="absolute rounded-r-full bg-white/15" style={{ left: 'calc(50% - 77px)', top: '120px', width: '3px', height: '36px' }} />
+      <div className="absolute rounded-l-full bg-white/15" style={{ right: 'calc(50% - 77px)', top: '108px', width: '3px', height: '44px' }} />
+    </div>
+
+    {/* hover overlay — same pattern as StandardCard */}
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030305]/95 via-[#040507]/75 to-transparent opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+      <div className="absolute inset-0 p-6 flex flex-col justify-end">
+        <h3 className="mb-2 text-xl font-bold text-zinc-100">{project.title}</h3>
+        <p className="mb-4 line-clamp-2 text-sm text-zinc-300">{project.description}</p>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.technologies.slice(0, 3).map((tech, index) => (
+            <span key={index} className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100">
+              {tech}
+            </span>
+          ))}
+          {project.technologies.length > 3 && (
+            <span className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100">
+              +{project.technologies.length - 3}
+            </span>
+          )}
+        </div>
+
+        <div className="flex gap-2">
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 rounded-md border border-white/20 bg-white/[0.12] px-3 py-1 text-sm font-medium text-zinc-100 transition-colors hover:bg-white/[0.18]"
+          >
+            <Github size={14} />
+            <span>Code</span>
+          </a>
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 rounded-md border border-[#00a4ef]/35 bg-[#00a4ef]/15 px-3 py-1 text-sm font-medium text-[#7dd3fc] transition-colors hover:bg-[#00a4ef]/25"
+            >
+              <ExternalLink size={14} />
+              <span>Demo</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {/* icon badge — top right, always visible */}
+    <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-white/[0.13] p-2 text-[#7dd3fc] backdrop-blur">
+      {project.icon}
+    </div>
+  </motion.div>
+);
+
+/* ─── Standard card (unchanged) ─── */
+const StandardCard: React.FC<{ project: Project }> = ({ project }) => (
+  <motion.div
+    variants={itemVariants}
+    className="group cert-card relative h-72 overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
+  >
+    <img
+      src={project.image}
+      alt={project.title}
+      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030305]/95 via-[#040507]/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+      <div className="absolute inset-0 p-6 flex flex-col justify-end">
+        <h3 className="mb-2 text-xl font-bold text-zinc-100">{project.title}</h3>
+        <p className="mb-4 line-clamp-2 text-sm text-zinc-300">{project.description}</p>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.technologies.slice(0, 3).map((tech, index) => (
+            <span key={index} className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100">
+              {tech}
+            </span>
+          ))}
+          {project.technologies.length > 3 && (
+            <span className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100">
+              +{project.technologies.length - 3}
+            </span>
+          )}
+        </div>
+
+        <div className="flex gap-2">
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 rounded-md border border-white/20 bg-white/[0.12] px-3 py-1 text-sm font-medium text-zinc-100 transition-colors hover:bg-white/[0.18]"
+          >
+            <Github size={14} />
+            <span>Code</span>
+          </a>
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 rounded-md border border-[#00a4ef]/35 bg-[#00a4ef]/15 px-3 py-1 text-sm font-medium text-[#7dd3fc] transition-colors hover:bg-[#00a4ef]/25"
+            >
+              <ExternalLink size={14} />
+              <span>Demo</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-white/[0.13] p-2 text-[#7dd3fc] backdrop-blur">
+      {project.icon}
+    </div>
+  </motion.div>
+);
+
+/* ─── Main component ─── */
+const Projects: React.FC = () => {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [activeFilter, setActiveFilter] = useState<string>('All');
 
   const projects: Project[] = [
     {
       id: 1,
-      title: "Student Campus Cloud Network",
-      description: "A full-stack, cloud-based smart campus management system integrating AI attendance (face recognition), PaperVista, AutoSlideX, Smart Career Guidance, Student Forum, E-Canteen, E-Library, and Online Fee Payment with secure role-based access for Teacher, Student, Admin, and Guest panels, serving 10+ users.",
-      image: "images/Student-Campus-Cloud-Network.png",
-      tags: ["AI", "Cloud Computing", "Full Stack", "Campus Management"],
-      features: [
-        "AI-powered face recognition attendance",
-        "Integrated PaperVista & AutoSlideX",
-        "Smart Career Guidance System",
-        "Student Forum & E-Library",
-        "E-Canteen & Online Fee Payment",
-        "Role-based access (Teacher/Student/Admin/Guest)"
-      ],
-      technologies: [
-        "React.js",
-        "Python",
-        "Flask",
-        "FastAPI",
-        "Machine Learning",
-        "KNN",
-        "Gemini API",
-        "Supabase",
-        "PostgreSQL",
-        "REST APIs"
-      ],
-      githubUrl: "https://github.com/Yug-Bothra/NEURO_CAMPUS",
-      liveUrl: "https://neuro-campus-73w8.vercel.app/",
-      icon: <GraduationCap className="w-6 h-6" />
+      title: 'Student Campus Cloud Network',
+      description:
+        'AI-powered campus management ecosystem — 8 production apps with face recognition attendance (KNN), AI notes/PPT/exam generation via Gemini, social forum (FORAM), e-library, fee payment, and e-canteen across 4 role-based panels.',
+      image: 'public/images/Student-Campus-Cloud-Network.png',
+      tags: ['AI', 'Full Stack', 'Campus Management'],
+      technologies: ['React.js', 'FastAPI', 'Gemini API', 'Supabase', 'PostgreSQL', 'KNN', 'OpenCV'],
+      githubUrl: 'https://github.com/jiyanshuj/Major-project',
+      liveUrl: 'https://neuro-campus-73w8.vercel.app/',
+      icon: <GraduationCap className="w-6 h-6" />,
     },
     {
       id: 2,
-      title: "Smart Career Guidance System",
-      description: "An AI-driven career assessment and guidance platform that evaluates students across core computer science domains including OS, DBMS, Compiler Design, OOP, and Programming. The system analyzes performance, tracks progress, and recommends personalized career paths and learning resources to support informed decision-making.",
-      image: "images/Smart-Career-Guidance-System.png",
-      tags: ["AI", "Career Guidance", "EdTech"],
-      features: [
-        "Domain-wise assessment (OS, DBMS, CD, OOP, Programming)",
-        "Skill evaluation and progress analysis",
-        "Personalized career path recommendations",
-        "Curated learning resource suggestions",
-        "Real-time progress tracking dashboard",
-        "Secure authentication and user management"
-      ],
-      technologies: [
-        "React.js",
-        "Python",
-        "FastAPI",
-        "Clerk Authentication",
-        "Supabase",
-        "PostgreSQL",
-        "REST API"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/Smart-Career-Guidance-System",
-      liveUrl: "https://smart-career-guidance-system.vercel.app/",
-      icon: <Compass className="w-6 h-6" />
+      title: 'Smart Career Guidance System',
+      description:
+        'AI-driven career assessment platform with adaptive quizzes across 6 CS domains (OS, DBMS, Networks, Aptitude, Verbal, Programming), Gemini-generated questions, and a performance analytics dashboard.',
+      image: 'public/images/Smart-Career-Guidance-System.png',
+      tags: ['AI', 'EdTech', 'Full Stack'],
+      technologies: ['React.js', 'TypeScript', 'Flask', 'Clerk', 'Supabase', 'Gemini API', 'REST API'],
+      githubUrl: 'https://github.com/jiyanshuj/Smart-Career-Guidance-System',
+      liveUrl: 'https://smart-career-guidance-system.vercel.app/',
+      icon: <Compass className="w-6 h-6" />,
     },
     {
       id: 3,
-      title: "AutoSlideX",
-      description: "An AI-powered presentation generation platform that converts a simple topic into a complete, structured PowerPoint. It follows a two-step AI workflow where users first customize slide headings and then generate detailed content with relevant images and diagrams.",
-      image: "images/AutoSlideX.png",
-      tags: ["AI", "Presentation", "Productivity"],
-      features: [
-        "Two-step AI-based slide generation",
-        "Editable slide structure before final creation",
-        "Automatic content generation per slide",
-        "Context-aware image fetching",
-        "Architecture & diagram-aware slides",
-        "Download-ready PowerPoint output"
-      ],
-      technologies: [
-        "React",
-        "FastAPI",
-        "Python",
-        "Gemini API",
-        "Google Custom Search API",
-        "PPTX",
-        "REST API"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/AutoSlideX",
-      liveUrl: "https://auto-slide-x.vercel.app/",
-      icon: <Presentation className="w-6 h-6" />
+      title: 'AutoSlideX',
+      description:
+        'AI presentation generator — enter a topic and slide count, Gemini creates structured content with professional layouts, context-aware image fetching, and exports to PowerPoint (.pptx).',
+      image: 'public/images/AutoSlideX.png',
+      tags: ['AI', 'Productivity'],
+      technologies: ['React', 'FastAPI', 'Python', 'Gemini API', 'Google Custom Search API', 'python-pptx'],
+      githubUrl: 'https://github.com/jiyanshuj/AutoSlideX',
+      liveUrl: 'https://auto-slide-x.vercel.app/',
+      icon: <Presentation className="w-6 h-6" />,
     },
     {
       id: 4,
-      title: "PaperVista",
-      description: "A smart AI-powered question paper generator designed for college examinations. PaperVista generates MST-1, MST-2, and End-Semester question papers in a proper university-style format based on subject, syllabus, and marks distribution.",
-      image: "images/PaperVista.png",
-      tags: ["AI", "Education", "Exam Automation"],
-      features: [
-        "MST-1, MST-2, and End-Sem paper generation",
-        "College-standard question paper format",
-        "Configurable number of questions and marks",
-        "Balanced difficulty level",
-        "Syllabus-based paper generation",
-        "Downloadable question paper output"
-      ],
-      technologies: [
-        "React",
-        "FastAPI",
-        "Python",
-        "Gemini API",
-        "REST API",
-        "JSON"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/PaperVista",
-      liveUrl: "https://paper-vista-five.vercel.app/",
-      icon: <FileText className="w-6 h-6" />
+      title: 'PaperVista',
+      description:
+        'AI exam paper generator for educators. Supports MST-1, MST-2, and End-Semester formats with configurable difficulty, topic-based Gemini question generation, and print-ready university-style output.',
+      image: 'public/images/PaperVista.png',
+      tags: ['AI', 'EdTech'],
+      technologies: ['React', 'FastAPI', 'Python', 'Gemini API', 'Pydantic', 'REST API'],
+      githubUrl: 'https://github.com/jiyanshuj/PaperVista',
+      liveUrl: 'https://paper-vista-five.vercel.app/',
+      icon: <FileText className="w-6 h-6" />,
     },
     {
       id: 5,
-      title: "Health Guard AI",
-      description: "A machine learning-powered web application designed to predict diseases like Diabetes, Heart Disease, and Parkinson's based on user input. Utilizes pre-trained models and Streamlit for an intuitive user experience.",
-      image: "images/Health-Guard-AI.png",
-      tags: ["Python", "Machine Learning", "Healthcare"],
-      features: [
-        "Disease Prediction",
-        "Health Analysis",
-        "Custom Navigation",
-        "User Interface"
-      ],
-      technologies: [
-        "Python",
-        "Streamlit",
-        "scikit-learn",
-        "Pandas",
-        "NumPy"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/Health-Guard-AI",
-      liveUrl: "https://health-guard-ai.streamlit.app/",
-      icon: <Brain className="w-6 h-6" />
+      title: 'HealthGuard AI',
+      description:
+        "ML app predicting risk for Diabetes, Coronary Heart Disease, and Parkinson's using pre-trained models. Auto-trains on UCI datasets with confidence levels and personalised health recommendations.",
+      image: 'public/images/Health-Guard-AI.png',
+      tags: ['Machine Learning', 'Healthcare', 'Python'],
+      technologies: ['Python', 'Streamlit', 'scikit-learn', 'Pandas', 'NumPy'],
+      githubUrl: 'https://github.com/jiyanshuj/Health-Guard-AI',
+      liveUrl: 'https://health-guard-ai.streamlit.app/',
+      icon: <Brain className="w-6 h-6" />,
     },
     {
       id: 6,
-      title: "NextStep Resume",
-      description: "A full-stack web application for generating professional resumes with a modern tech stack. Features include dynamic form handling, real-time preview, and document generation.",
-      image: "images/NextStep-CV.png",
-      tags: ["TypeScript", "Python", "Full Stack"],
-      features: [
-        "Dynamic form handling",
-        "Real-time preview",
-        "Document generation",
-        "Responsive design",
-        "Type safety",
-        "Modern UI/UX"
-      ],
-      technologies: [
-        "React",
-        "TypeScript",
-        "Flask",
-        "Tailwind CSS",
-        "PostgreSQL",
-        "Python-docx"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/Resume-Gen",
-      liveUrl: "https://nextstep-resume.netlify.app/",
-      icon: <FileText className="w-6 h-6" />
+      title: 'NextStep CV',
+      description:
+        'ATS-optimized AI resume builder with multi-section form, real-time preview, Gemini AI content optimization, and export to PDF & Word (.docx).',
+      image: 'public/images/NextStep-CV.png',
+      tags: ['Full Stack', 'AI'],
+      technologies: ['React', 'TypeScript', 'Flask', 'Gemini API', 'python-docx', 'Tailwind CSS'],
+      githubUrl: 'https://github.com/jiyanshuj/Resume-Gen',
+      liveUrl: 'https://nextstep-resume.netlify.app/',
+      icon: <FileText className="w-6 h-6" />,
     },
     {
       id: 7,
-      title: "Sustainable Travel Planner",
-      description: "An eco-friendly travel planning application that helps users make environmentally conscious travel decisions. Developed during Hack Wave Hackathon.",
-      image: "https://images.pexels.com/photos/7412069/pexels-photo-7412069.jpeg",
-      tags: ["Python", "Web Development", "Sustainability"],
-      features: [
-        "Carbon footprint calculation",
-        "Eco-friendly routes",
-        "Impact tracking"
-      ],
-      technologies: [
-        "Python",
-        "Django",
-        "JavaScript",
-        "HTML/CSS",
-        "APIs"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/Errror-404-v1-",
-      liveUrl: "https://error-404-v1-1.onrender.com/",
-      icon: <Activity className="w-6 h-6" />
+      title: 'Resume Parser API',
+      description:
+        'FastAPI backend powering the job seeker app — parses uploaded PDF/DOCX resumes with Gemini AI, extracts structured profile data, handles Cloudinary file hosting, and stores results in MongoDB.',
+      image: 'public/images/Resume-Parser-API.png',
+      tags: ['API', 'AI', 'Python'],
+      technologies: ['FastAPI', 'Python', 'Gemini AI', 'MongoDB', 'Cloudinary', 'PyPDF2', 'Pydantic'],
+      githubUrl: 'https://github.com/jiyanshuj/resume-parse',
+      liveUrl: 'https://resume-parse-1.onrender.com',
+      icon: <Shield className="w-5 h-5" />,
+      displayType: 'phone',
     },
     {
       id: 8,
-      title: "Skills Bridge Platform",
-      description: "An AI-powered educational platform bridging the gap between academic learning and job skills. The platform features personalized learning paths, skill gap analysis, and industry collaboration portal.",
-      image: "images/Skills-Bridge-Platform.png",
-      tags: ["AI", "Education", "Web Development"],
-      features: [
-        "AI-driven skill gap analysis",
-        "Personalized learning paths",
-        "Gamification features",
-        "Industry collaboration portal",
-        "Responsive design",
-        "Resource library"
-      ],
-      technologies: [
-        "React",
-        "Node.js",
-        "TensorFlow",
-        "MongoDB",
-        "Express",
-        "AWS",
-        "Docker"
-      ],
-      githubUrl: "https://github.com/jiyanshuj/project",
-      liveUrl: "https://skillpulse.netlify.app/",
-      icon: <GraduationCap className="w-6 h-6" />
-    }
+      title: 'Skills Bridge Platform',
+      description:
+        'Career upskilling platform with AI-powered learning paths, Langflow video analysis chatbot, user dashboard, partner portal, admin panel, and multi-method auth (Email, GitHub, Google OAuth).',
+      image: 'public/images/Skills-Bridge-Platform.png',
+      tags: ['AI', 'EdTech', 'Full Stack'],
+      technologies: ['React', 'TypeScript', 'Firebase', 'Langflow AI', 'Google OAuth', 'Tailwind CSS'],
+      githubUrl: 'https://github.com/jiyanshuj/Skills-Bridge-Platform',
+      liveUrl: 'https://skillpulse.netlify.app/',
+      icon: <GraduationCap className="w-6 h-6" />,
+    },
+    {
+      id: 9,
+      title: 'Visnex Global',
+      description:
+        'AI-powered startup ecosystem platform connecting founders, investors, incubators, and partners. Features AI-driven matching, startup discovery, investor search, and real-time stats across 120+ countries.',
+      image: 'public/images/Visnex-Global.png',
+      tags: ['Full Stack', 'Web Development'],
+      technologies: ['React', 'JavaScript', 'Python', 'Vercel'],
+      githubUrl: 'https://github.com/jiyanshuj/Visnex-Global',
+      liveUrl: 'https://visnex-global-2ake.vercel.app/#home',
+      icon: <Globe className="w-6 h-6" />,
+    },
+    {
+      id: 10,
+      title: 'Error 404 Travel Planner',
+      description:
+        'Django web app for smart travel planning. Calculates distance via TomTom API, recommends transport mode (Bus/Train/Flight), and includes a hotel booking system with full payment flow.',
+      image: 'https://images.pexels.com/photos/7412069/pexels-photo-7412069.jpeg',
+      tags: ['Full Stack', 'Web Development', 'Python'],
+      technologies: ['Django', 'Python', 'TomTom API', 'PostgreSQL', 'JavaScript', 'HTML/CSS'],
+      githubUrl: 'https://github.com/jiyanshuj/Error-404-v1',
+      liveUrl: 'https://error-404-v1-1.onrender.com/',
+      icon: <Activity className="w-6 h-6" />,
+    },
+    {
+      id: 11,
+      title: 'Job Seeker App',
+      description:
+        'React Native mobile app with swipe-based job matching, AI match scoring, salary range filters, saved jobs, and resume upload with AI parsing and Cloudinary storage.',
+      image: 'public/images/Job-Seeker-App.jpeg',
+      tags: ['Mobile', 'Full Stack'],
+      technologies: ['React Native', 'Expo', 'TypeScript', 'REST API'],
+      githubUrl: 'https://github.com/jiyanshuj/job-seekr-app',
+      icon: <Smartphone className="w-5 h-5" />,
+      displayType: 'phone',
+    },
   ];
 
-  // Updated filters
-  const filters = ['All', 'Web Apps', 'AI/ML', 'APIs'];
+  const filters = ['All', 'Full Stack', 'AI', 'Machine Learning', 'API', 'Mobile'];
 
-  // Updated filter logic
-  const filteredProjects = activeFilter === 'All'
-    ? projects
-    : projects.filter(project => {
-      if (activeFilter === 'Web Apps') {
-        return ['Web Development', 'Full Stack', 'TypeScript'].some(tag => project.tags.includes(tag));
-      }
-      if (activeFilter === 'AI/ML') {
-        return ['AI', 'Machine Learning', 'Python', 'Healthcare', 'Education', 'Presentation', 'Productivity', 'Career Guidance', 'EdTech', 'Exam Automation', 'Campus Management', 'Cloud Computing'].some(tag => project.tags.includes(tag));
-      }
-      if (activeFilter === 'APIs') {
-        return project.technologies.includes('APIs') || project.technologies.includes('REST API');
-      }
-      return false;
-    });
+  const filteredProjects =
+    activeFilter === 'All'
+      ? projects
+      : projects.filter((p) => p.tags.includes(activeFilter));
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
   return (
@@ -283,7 +338,7 @@ const Projects: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
+          <div className="cert-kicker mx-auto mb-6 flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
             <Sparkles size={14} />
             Featured Work
           </div>
@@ -292,7 +347,7 @@ const Projects: React.FC = () => {
           </h2>
           <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
           <p className="mx-auto mb-8 max-w-3xl text-lg text-zinc-400">
-            Here are some of my notable projects that showcase my skills in machine learning, web development, and problem-solving.
+            A mix of solo builds and team collaborations — spanning AI tools, full-stack platforms, backend APIs, and mobile apps.
           </p>
 
           <div className="flex flex-wrap justify-center gap-2 mb-10">
@@ -300,10 +355,11 @@ const Projects: React.FC = () => {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${activeFilter === filter
-                  ? 'border-[#00a4ef]/45 bg-[#00a4ef]/18 text-[#7dd3fc] shadow-[0_10px_30px_-18px_rgba(0,164,239,0.9)]'
-                  : 'cert-card text-zinc-400 hover:border-white/25 hover:text-zinc-200'
-                  }`}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
+                  activeFilter === filter
+                    ? 'border-[#00a4ef]/45 bg-[#00a4ef]/18 text-[#7dd3fc] shadow-[0_10px_30px_-18px_rgba(0,164,239,0.9)]'
+                    : 'cert-card text-zinc-400 hover:border-white/25 hover:text-zinc-200'
+                }`}
               >
                 {filter}
               </button>
@@ -314,72 +370,16 @@ const Projects: React.FC = () => {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          animate={inView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {filteredProjects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={itemVariants}
-              className="group cert-card relative h-72 overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
-            >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030305]/95 via-[#040507]/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                  <h3 className="mb-2 text-xl font-bold text-zinc-100">{project.title}</h3>
-                  <p className="mb-4 line-clamp-2 text-sm text-zinc-300">{project.description}</p>
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.slice(0, 3).map((tech, index) => (
-                      <span
-                        key={index}
-                        className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <span className="rounded-full border border-white/15 bg-white/[0.08] px-2 py-1 text-xs font-medium text-zinc-100">
-                        +{project.technologies.length - 3}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex gap-2">
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 rounded-md border border-white/20 bg-white/[0.12] px-3 py-1 text-sm font-medium text-zinc-100 transition-colors hover:bg-white/[0.18]"
-                    >
-                      <Github size={14} />
-                      <span>Code</span>
-                    </a>
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 rounded-md border border-[#00a4ef]/35 bg-[#00a4ef]/15 px-3 py-1 text-sm font-medium text-[#7dd3fc] transition-colors hover:bg-[#00a4ef]/25"
-                      >
-                        <ExternalLink size={14} />
-                        <span>Demo</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute right-4 top-4 rounded-full border border-white/20 bg-white/[0.13] p-2 text-[#7dd3fc] backdrop-blur">
-                {project.icon}
-              </div>
-            </motion.div>
-          ))}
+          {filteredProjects.map((project) =>
+            project.displayType === 'phone' ? (
+              <PhoneCard key={project.id} project={project} />
+            ) : (
+              <StandardCard key={project.id} project={project} />
+            )
+          )}
         </motion.div>
       </div>
     </section>
