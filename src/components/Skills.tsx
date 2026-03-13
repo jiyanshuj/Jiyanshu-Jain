@@ -16,30 +16,18 @@ const Skills: React.FC = () => {
   });
 
   const skills: Skill[] = [
-    // Programming Languages
     { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', category: 'languages' },
-    { name: 'Java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg', category: 'languages' },
     { name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', category: 'languages' },
     { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', category: 'languages' },
-    { name: 'PHP', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg', category: 'languages' },
-    { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', category: 'languages' },
-    { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg', category: 'languages' },
-
-    // Frameworks & Libraries
+    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', category: 'languages' },
+    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', category: 'frameworks' },
     { name: 'Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', category: 'frameworks' },
     { name: 'Flask', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original-wordmark.svg', category: 'frameworks' },
     { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', category: 'frameworks' },
-    { name: 'GeoPandas', icon: '', category: 'frameworks' },
-    { name: 'XGBoost', icon: '', category: 'frameworks' },
-    { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg', category: 'frameworks' },
-
-    // Tools & Technologies
     { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', category: 'tools' },
-    { name: 'GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', category: 'tools' },
     { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', category: 'tools' },
     { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', category: 'tools' },
-    { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', category: 'tools' },
-    { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', category: 'tools' },
+    { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', category: 'tools' },
   ];
 
   const marqueeVariants = {
@@ -70,14 +58,14 @@ const Skills: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
+          <div className="cert-kicker mx-auto mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
             <Sparkles size={14} />
             Core Capabilities
           </div>
           <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">My Skills</h2>
           <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
           <p className="mx-auto max-w-3xl text-lg text-zinc-400">
-            I've developed a diverse skill set across multiple technologies and domains. Here's an overview of my technical expertise and capabilities.
+            Every skill here has a project behind it
           </p>
         </motion.div>
 
@@ -115,31 +103,30 @@ const Skills: React.FC = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            'Machine Learning',
-            'Data Analysis',
-            'Object Oriented Programming',
-            'Data Structures & Algorithms',
-            'UI/UX Design',
-            'Team Leadership',
-            'Problem Solving',
-            'Public Speaking',
-            'Research',
-            'Project Management',
-            'Agile Methodology',
-            'Technical Writing'
-          ].map((skill, index) => (
+            { title: 'Languages', items: ['Python', 'JavaScript', 'TypeScript', 'C++', 'SQL', 'HTML/CSS'] },
+            { title: 'Backend', items: ['FastAPI', 'Flask', 'Django', 'Node.js', 'REST APIs', 'WebSockets'] },
+            { title: 'ML/Data', items: ['scikit-learn', 'Pandas', 'NumPy', 'OpenCV', 'Gemini AI', 'Langflow'] },
+            { title: 'Cloud', items: ['Azure', 'Vercel', 'Render', 'Netlify', 'Firebase', 'Supabase', 'Cloudinary'] },
+            { title: 'Databases', items: ['PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'Supabase'] },
+            { title: 'Tools', items: ['Git', 'Docker', 'Postman', 'Figma', 'Linux', 'VS Code'] },
+          ].map((category, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="cert-card rounded-xl p-4 text-center transition-colors hover:border-white/20"
+              className="cert-card rounded-xl p-6 transition-colors hover:border-white/20"
             >
-              <span className="text-sm font-medium text-zinc-200">
-                {skill}
-              </span>
+              <h3 className="mb-4 text-lg font-bold text-cyan-400">{category.title}</h3>
+              <div className="flex flex-wrap gap-2">
+                {category.items.map((item, i) => (
+                  <span key={i} className="rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-sm text-zinc-200">
+                    {item}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>

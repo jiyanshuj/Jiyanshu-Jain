@@ -86,11 +86,11 @@ const Hero: React.FC = () => {
 
           {/* Portfolio-aligned summary */}
           <p className="mb-8 text-sm text-zinc-500 leading-relaxed max-w-md mx-auto lg:mx-0">
-            Building AI-first products in <span className="text-zinc-300">EdTech</span>,{' '}
-            <span className="text-zinc-300">CareerTech</span>, and <span className="text-zinc-300">Health AI</span>.
-            Highlights: <span className="text-zinc-300">NEURO CAMPUS</span>,{' '}
-            <span className="text-zinc-300">PaperVista</span>, <span className="text-zinc-300">AutoSlideX</span>, and{' '}
-            <span className="text-zinc-300">Resume Parser APIs</span>.
+            AI products across{' '}
+            <span className="text-zinc-300">EdTech</span>,{' '}
+            <span className="text-zinc-300">HealthTech</span>, and{' '}
+            <span className="text-zinc-300">Geospatial ML</span>{' '}
+            — built end to end, deployed for real.
           </p>
 
           {/* CTA buttons */}
@@ -190,7 +190,7 @@ const Hero: React.FC = () => {
               <span className="text-base">💼</span>
               <div>
                 <p className="text-[10px] text-zinc-400 leading-none mb-0.5">Currently</p>
-                <p className="text-xs font-semibold text-white leading-none">Intern @ EY</p>
+                <p className="text-xs font-semibold text-white leading-none">Data Science @ EY</p>
               </div>
             </motion.div>
           </div>

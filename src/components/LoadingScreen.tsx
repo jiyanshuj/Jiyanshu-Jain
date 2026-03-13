@@ -71,7 +71,7 @@ const LoadingScreen: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-2 text-lg text-zinc-400"
           >
-            Crafting Digital Experiences
+            AI · Data · Full Stack
           </motion.p>
         </motion.div>
 

@@ -140,7 +140,7 @@ export default function CertificateShowcase() {
             Credentials & Achievements
           </div>
           <h1 className="cert-title" style={{
-            fontFamily: "'Syne',sans-serif", fontSize: "clamp(36px,6vw,56px)",
+            fontFamily: "'Syne',sans-serif", fontSize: "clamp(28px,5vw,40px)",
             fontWeight: 800, margin: 0, lineHeight: 1.1, letterSpacing: "-0.03em",
             background: "linear-gradient(135deg,#fff 0%,#9ca3af 100%)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",

@@ -76,16 +76,16 @@ const Contact: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="cert-kicker mx-auto mb-6 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] backdrop-blur">
+          <div className="cert-kicker mx-auto mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] backdrop-blur">
             <Sparkles size={14} />
             Get In Touch
           </div>
-          <h2 className="cert-title mb-6 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
+          <h2 className="cert-title mb-6 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
             Let's Connect
           </h2>
           <div className="mx-auto mb-8 h-px w-28 bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
-          <p className="mx-auto max-w-2xl text-base text-zinc-400 md:text-lg">
-            I enjoy building practical, impactful products. If you have an idea, opportunity, or challenge, I would love to collaborate.
+          <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+            Got an idea? Let's build it.
           </p>
 
           <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
@@ -165,7 +165,7 @@ const Contact: React.FC = () => {
             <h3 className="cert-title mx-auto mb-4 max-w-xl bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-2xl font-bold leading-tight text-transparent md:text-3xl">
               "Build what matters. Make it useful. Keep it human."
             </h3>
-            <p className="mx-auto max-w-xl text-xs leading-relaxed text-zinc-400 md:text-sm">
+            <p className="mx-auto max-w-xl text-sm leading-relaxed text-zinc-400">
               I love collaborating on ideas that solve real problems and create measurable impact.
             </p>
           </div>

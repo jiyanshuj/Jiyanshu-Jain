@@ -251,6 +251,17 @@ const Projects: React.FC = () => {
     },
     {
       id: 7,
+      title: 'EY EV Charging Station Locator',
+      description:
+        'Built at EY — Production-grade geospatial platform for EV charging infrastructure. Features real-time station search, route optimization, availability tracking, and analytics dashboard with 50K+ station data.',
+      image: '/images/EY-EV-Charging.png',
+      tags: ['Full Stack', 'AI'],
+      technologies: ['React', 'FastAPI', 'GeoPandas', 'XGBoost', 'PostgreSQL', 'Redis', 'Mapbox'],
+      githubUrl: '#',
+      icon: <Activity className="w-6 h-6" />,
+    },
+    {
+      id: 8,
       title: 'Resume Parser API',
       description:
         'FastAPI backend powering the job seeker app — parses uploaded PDF/DOCX resumes with Gemini AI, extracts structured profile data, handles Cloudinary file hosting, and stores results in MongoDB.',
@@ -260,10 +271,9 @@ const Projects: React.FC = () => {
       githubUrl: 'https://github.com/jiyanshuj/resume-parse',
       liveUrl: 'https://resume-parse-1.onrender.com',
       icon: <Shield className="w-5 h-5" />,
-      displayType: 'phone',
     },
     {
-      id: 8,
+      id: 9,
       title: 'Skills Bridge Platform',
       description:
         'Career upskilling platform with AI-powered learning paths, Langflow video analysis chatbot, user dashboard, partner portal, admin panel, and multi-method auth (Email, GitHub, Google OAuth).',
@@ -275,7 +285,7 @@ const Projects: React.FC = () => {
       icon: <GraduationCap className="w-6 h-6" />,
     },
     {
-      id: 9,
+      id: 10,
       title: 'Visnex Global',
       description:
         'AI-powered startup ecosystem platform connecting founders, investors, incubators, and partners. Features AI-driven matching, startup discovery, investor search, and real-time stats across 120+ countries.',
@@ -287,7 +297,7 @@ const Projects: React.FC = () => {
       icon: <Globe className="w-6 h-6" />,
     },
     {
-      id: 10,
+      id: 11,
       title: 'Error 404 Travel Planner',
       description:
         'Django web app for smart travel planning. Calculates distance via TomTom API, recommends transport mode (Bus/Train/Flight), and includes a hotel booking system with full payment flow.',
@@ -299,7 +309,7 @@ const Projects: React.FC = () => {
       icon: <Activity className="w-6 h-6" />,
     },
     {
-      id: 11,
+      id: 12,
       title: 'Job Seeker App',
       description:
         'React Native mobile app with swipe-based job matching, AI match scoring, salary range filters, saved jobs, and resume upload with AI parsing and Cloudinary storage.',
@@ -347,7 +357,7 @@ const Projects: React.FC = () => {
           </h2>
           <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
           <p className="mx-auto mb-8 max-w-3xl text-lg text-zinc-400">
-            A mix of solo builds and team collaborations — spanning AI tools, full-stack platforms, backend APIs, and mobile apps.
+            Projects that started as problems and ended as products
           </p>
 
           <div className="flex flex-wrap justify-center gap-2 mb-10">
