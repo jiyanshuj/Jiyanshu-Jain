@@ -28,11 +28,16 @@ const Skills: React.FC = () => {
     // Frameworks & Libraries
     { name: 'Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', category: 'frameworks' },
     { name: 'Flask', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original-wordmark.svg', category: 'frameworks' },
+    { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', category: 'frameworks' },
+    { name: 'GeoPandas', icon: '', category: 'frameworks' },
+    { name: 'XGBoost', icon: '', category: 'frameworks' },
     { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg', category: 'frameworks' },
 
     // Tools & Technologies
     { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', category: 'tools' },
     { name: 'GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', category: 'tools' },
+    { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', category: 'tools' },
+    { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', category: 'tools' },
     { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', category: 'tools' },
     { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', category: 'tools' },
   ];
@@ -43,7 +48,7 @@ const Skills: React.FC = () => {
       transition: {
         x: {
           repeat: Infinity,
-          repeatType: "reverse",
+          repeatType: "loop" as const,
           duration: 20,
           ease: "linear",
         },
@@ -89,12 +94,18 @@ const Skills: React.FC = () => {
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="mb-3 h-12 w-12 rounded-lg border border-white/15 bg-white/[0.08] p-2">
-                  <img
-                    src={skill.icon}
-                    alt={skill.name}
-                    className="w-full h-full object-contain"
-                  />
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg border border-white/15 bg-white/[0.08] p-2">
+                  {skill.icon ? (
+                    <img
+                      src={skill.icon}
+                      alt={skill.name}
+                      className="h-full w-full object-contain"
+                    />
+                  ) : (
+                    <span className="text-center text-xs font-bold leading-none text-cyan-400">
+                      {skill.name === 'GeoPandas' ? 'GPD' : 'XGB'}
+                    </span>
+                  )}
                 </div>
                 <span className="text-sm font-medium text-zinc-200">
                   {skill.name}
