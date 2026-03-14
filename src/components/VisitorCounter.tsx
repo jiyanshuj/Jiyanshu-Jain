@@ -1,8 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Users } from 'lucide-react';
+import { supabase } from '../lib/supabaseClient';
 
 const VisitorCounter: React.FC = () => {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const increment = async () => {
+      if (sessionStorage.getItem('visited')) return;
+
+      const { data } = await supabase.rpc('increment_visitors');
+      setCount(data);
+      sessionStorage.setItem('visited', 'true');
+    };
+
+    const fetchCount = async () => {
+      if (sessionStorage.getItem('visited')) {
+        const { data } = await supabase
+          .from('visitors')
+          .select('count')
+          .eq('id', 1)
+          .single();
+        setCount(data?.count ?? null);
+      } else {
+        increment();
+      }
+    };
+
+    fetchCount();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,7 +41,7 @@ const VisitorCounter: React.FC = () => {
     >
       <Users size={18} className="text-[#00a4ef]" />
       <span className="font-medium text-zinc-300">
-        Thank you for visiting!
+        {count !== null ? `${count.toLocaleString()} visitors` : '...'}
       </span>
     </motion.div>
   );
