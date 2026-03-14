@@ -7,24 +7,38 @@ const VisitorCounter: React.FC = () => {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
+    if (!supabase) {
+      return;
+    }
+
+    const client = supabase;
+
     const increment = async () => {
       if (sessionStorage.getItem('visited')) return;
 
-      const { data } = await supabase.rpc('increment_visitors');
-      setCount(data);
-      sessionStorage.setItem('visited', 'true');
+      try {
+        const { data } = await client.rpc('increment_visitors');
+        setCount(data ?? null);
+        sessionStorage.setItem('visited', 'true');
+      } catch (error) {
+        console.error('Failed to increment visitor count:', error);
+      }
     };
 
     const fetchCount = async () => {
-      if (sessionStorage.getItem('visited')) {
-        const { data } = await supabase
-          .from('visitors')
-          .select('count')
-          .eq('id', 1)
-          .single();
-        setCount(data?.count ?? null);
-      } else {
-        increment();
+      try {
+        if (sessionStorage.getItem('visited')) {
+          const { data } = await client
+            .from('visitors')
+            .select('count')
+            .eq('id', 1)
+            .single();
+          setCount(data?.count ?? null);
+        } else {
+          increment();
+        }
+      } catch (error) {
+        console.error('Failed to fetch visitor count:', error);
       }
     };
 
