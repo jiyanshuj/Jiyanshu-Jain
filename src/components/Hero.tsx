@@ -169,10 +169,11 @@ const Hero: React.FC = () => {
             </div>
             {/* Floating badge — Oracle cert */}
             <motion.div
-              className="absolute -bottom-2 -right-4 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-md"
+              className="absolute -bottom-2 -right-4 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-md cursor-pointer"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 }}
+              whileHover={{ scale: 1.08, borderColor: 'rgba(249,115,22,0.4)', backgroundColor: 'rgba(249,115,22,0.1)', transition: { duration: 0.15 } }}
             >
               <span className="text-base">🏅</span>
               <div>
@@ -182,10 +183,11 @@ const Hero: React.FC = () => {
             </motion.div>
             {/* Floating badge — EY intern */}
             <motion.div
-              className="absolute -top-2 -left-4 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-md"
+              className="absolute -top-2 -left-4 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-md cursor-pointer"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
+              whileHover={{ scale: 1.08, borderColor: 'rgba(0,164,239,0.4)', backgroundColor: 'rgba(0,164,239,0.12)', transition: { duration: 0.15 } }}
             >
               <span className="text-base">💼</span>
               <div>
