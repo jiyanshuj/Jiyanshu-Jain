@@ -157,14 +157,9 @@ const Hero: React.FC = () => {
             {/* Photo circle */}
             <div className="relative h-64 w-64 overflow-hidden rounded-full border-2 border-white/20 md:h-80 md:w-80">
               <img
-                src="/Pic.png"
+                src="/pic.jpg"
                 alt="Jiyanshu Jain"
-                className="w-full h-full object-cover"
-                style={{
-                  objectPosition: "50% 28%",
-                  transform: "scale(1.5)",
-                  transformOrigin: "50% 28%",
-                }}
+                className="w-full h-full object-contain"
               />
             </div>
             {/* Floating badge — Oracle cert */}
