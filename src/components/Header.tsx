@@ -38,9 +38,11 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled
-        ? 'bg-[#0a0a0f]/80 py-3 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.9)] backdrop-blur-md'
-        : 'bg-transparent py-6'
+      className={`fixed w-full z-50 transition-all duration-300 ${mobileMenuOpen
+        ? 'bg-[#0a0a0f]/55 py-3 shadow-[0_10px_30px_-20px_rgba(0,0,0,0.85)] backdrop-blur-sm'
+        : isScrolled
+          ? 'bg-[#0a0a0f]/80 py-3 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.9)] backdrop-blur-md'
+          : 'bg-transparent py-6'
         }`}
     >
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
@@ -111,7 +113,7 @@ const Header: React.FC = () => {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden border-t border-white/10 bg-[#0a0a0f]/95 shadow-[0_18px_50px_-25px_rgba(0,0,0,0.95)] backdrop-blur-md"
+          className="md:hidden border-t border-white/10 bg-[#0a0a0f]/50 shadow-[0_18px_45px_-25px_rgba(0,0,0,0.9)] backdrop-blur-sm"
         >
           <div className="container mx-auto px-4 py-4">
             <ul className="space-y-4">
