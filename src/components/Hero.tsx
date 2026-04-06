@@ -20,10 +20,10 @@ const Hero: React.FC = () => {
 
   const typingText = useTypingEffect([
     'AI Product Engineer',
-    'Full-Stack Developer (React + FastAPI/Flask)',
-    'ML Builder (Computer Vision + NLP)',
-    'Cloud-Ready App Developer',
-    'Data Science Intern @ EY',
+    'ML Builder',
+    'Full-Stack Dev',
+    'Cloud Developer',
+    'Data Scientist',
   ]);
 
   return (
@@ -31,25 +31,25 @@ const Hero: React.FC = () => {
       <ParticleBackground />
 
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_50%_-12%,rgba(44,53,120,0.35),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_50%_-12%,rgba(30,58,138,0.4),transparent_72%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
       </div>
 
       {/* Animated ambient blobs */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-2xl"
-          animate={{ x: [0, 30, 0], y: [0, 50, 0], scale: [1, 1.2, 1] }}
+          className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl"
+          animate={{ x: [0, 30, 0], y: [0, 50, 0], scale: [1, 1.05, 1] }}
           transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
         />
         <motion.div
-          className="absolute -right-20 top-40 h-96 w-96 rounded-full bg-indigo-400/20 blur-2xl"
-          animate={{ x: [0, -50, 0], y: [0, 30, 0], scale: [1, 1.1, 1] }}
+          className="absolute -right-20 top-40 h-96 w-96 rounded-full bg-indigo-400/20 blur-3xl"
+          animate={{ x: [0, -50, 0], y: [0, 30, 0], scale: [1, 1.05, 1] }}
           transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
         />
         <motion.div
-          className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-rose-400/20 blur-2xl"
-          animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.15, 1] }}
+          className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-violet-400/15 blur-3xl"
+          animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.05, 1] }}
           transition={{ duration: 18, repeat: Infinity, repeatType: "reverse" }}
         />
       </div>
@@ -65,13 +65,13 @@ const Hero: React.FC = () => {
         >
           {/* Kicker badge */}
           <div className="cert-kicker mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00a4ef] animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#38bdf8] animate-pulse" />
             Available For Projects
           </div>
 
           {/* Name */}
           <h1 className="cert-title mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">
-            <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white to-zinc-200 bg-clip-text text-transparent">
               Jiyanshu Jain
             </span>
           </h1>
@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
           {/* Typing role */}
           <p className="mb-6 text-xl text-zinc-400 md:text-2xl">
             A passionate{' '}
-            <span className="font-semibold text-[#00a4ef]">
+            <span className="font-semibold text-[#38bdf8]">
               {typingText}<span className="animate-blink">|</span>
             </span>
           </p>
@@ -99,7 +99,7 @@ const Hero: React.FC = () => {
               href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="rounded-xl border border-[#00a4ef]/40 bg-[#00a4ef]/20 px-8 py-3 font-medium text-white shadow-[0_18px_40px_-25px_rgba(0,164,239,0.65)] transition-colors hover:bg-[#00a4ef]/30"
+              className="rounded-xl border border-[#38bdf8]/40 bg-[#38bdf8]/20 px-8 py-3 font-medium text-white shadow-[0_18px_40px_-25px_rgba(56,189,248,0.65)] transition-colors hover:bg-[#38bdf8]/30"
             >
               Contact Me
             </motion.a>
@@ -128,7 +128,7 @@ const Hero: React.FC = () => {
                 key={i}
                 className="flex items-center gap-2 rounded-lg border border-white/8 bg-white/[0.04] px-4 py-2.5"
               >
-                <span className="text-[#00a4ef]">{s.icon}</span>
+                <span className="text-[#38bdf8]">{s.icon}</span>
                 <div>
                   <p className="text-xs text-zinc-500 leading-none mb-0.5">{s.label}</p>
                   <p className="text-sm font-semibold text-white leading-none">{s.value}</p>
@@ -147,10 +147,10 @@ const Hero: React.FC = () => {
         >
           <div className="relative">
             {/* Glow ring */}
-            <div className="absolute inset-0 rounded-full bg-[#00a4ef]/20 blur-2xl scale-110 pointer-events-none" />
+            <div className="absolute inset-0 rounded-full bg-[#38bdf8]/20 blur-2xl scale-110 pointer-events-none" />
             {/* Rotating dashed border */}
             <motion.div
-              className="absolute inset-[-6px] rounded-full border border-dashed border-[#00a4ef]/30 pointer-events-none"
+              className="absolute inset-[-6px] rounded-full border border-dashed border-[#38bdf8]/30 pointer-events-none"
               animate={{ rotate: 360 }}
               transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
             />
@@ -159,7 +159,7 @@ const Hero: React.FC = () => {
               <img
                 src="/pic.jpg"
                 alt="Jiyanshu Jain"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </div>
             {/* Floating badge — Oracle cert */}
@@ -182,7 +182,7 @@ const Hero: React.FC = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
-              whileHover={{ scale: 1.08, borderColor: 'rgba(0,164,239,0.4)', backgroundColor: 'rgba(0,164,239,0.12)', transition: { duration: 0.15 } }}
+              whileHover={{ scale: 1.08, borderColor: 'rgba(56,189,248,0.4)', backgroundColor: 'rgba(56,189,248,0.12)', transition: { duration: 0.15 } }}
             >
               <span className="text-base">💼</span>
               <div>

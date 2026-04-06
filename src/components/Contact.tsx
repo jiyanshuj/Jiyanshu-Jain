@@ -90,9 +90,9 @@ const Contact: React.FC = () => {
 
           <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
             {[
-              { label: 'Open To', value: 'Projects' },
+              { label: 'Open To', value: 'Full-Time / Internships' },
               { label: 'Preferred', value: 'Email' },
-              { label: 'Timezone', value: 'IST' },
+              { label: 'Location', value: 'Indore, IN' },
             ].map((stat) => (
               <div key={stat.label} className="cert-card rounded-xl px-4 py-3">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-500">{stat.label}</p>

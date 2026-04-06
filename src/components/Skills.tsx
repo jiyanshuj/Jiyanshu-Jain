@@ -107,7 +107,7 @@ const Skills: React.FC = () => {
           {[
             { title: 'Languages', items: ['Python', 'JavaScript', 'TypeScript', 'C++', 'SQL', 'HTML/CSS'] },
             { title: 'Backend', items: ['FastAPI', 'Flask', 'Django', 'Node.js', 'REST APIs', 'WebSockets'] },
-            { title: 'ML/Data', items: ['scikit-learn', 'Pandas', 'NumPy', 'OpenCV', 'Gemini AI', 'Langflow'] },
+            { title: 'ML/Data', items: ['XGBoost', 'GeoPandas', 'scikit-learn', 'Pandas', 'NumPy', 'PostGIS'] },
             { title: 'Cloud', items: ['Azure', 'Vercel', 'Render', 'Netlify', 'Firebase', 'Supabase', 'Cloudinary'] },
             { title: 'Databases', items: ['PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'Supabase'] },
             { title: 'Tools', items: ['Git', 'Docker', 'Postman', 'Figma', 'Linux', 'VS Code'] },

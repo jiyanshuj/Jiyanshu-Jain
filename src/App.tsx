@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -22,10 +25,38 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2500);
-
+    }, 1500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (loading) return;
+    const timer = setTimeout(() => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+      const sections = gsap.utils.toArray<HTMLElement>('main > section:not(:first-child):not(#certifications)');
+      sections.forEach((section) => {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 48 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.75,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      });
+    }, 100);
+    return () => {
+      clearTimeout(timer);
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, [loading]);
 
   if (loading) {
     return <LoadingScreen />;

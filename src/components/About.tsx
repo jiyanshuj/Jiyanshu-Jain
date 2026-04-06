@@ -21,7 +21,7 @@ const stats = [
   {
     icon: <Rocket size={22} />,
     label: 'Live Projects',
-    value: '11 Deployed',
+    value: '8+ Deployed',
     sub: 'Running in production',
     color: '#10b981',
   },

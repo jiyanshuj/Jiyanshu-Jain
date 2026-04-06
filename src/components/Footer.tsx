@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
     {
       icon: <Mail size={18} />,
       label: 'Email',
-      href: 'mailto:jiyanshujain@gmail.com',
+      href: 'mailto:jiyanshujain321@gmail.com',
       accent: 'group-hover:text-rose-300',
     },
   ];
