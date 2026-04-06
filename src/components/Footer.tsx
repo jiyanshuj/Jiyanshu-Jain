@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
         <div className="cert-card rounded-3xl p-7 md:p-10">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div>
-              <div className="cert-kicker mb-4 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em]">
+              <div className="cert-kicker inline-flex items-center gap-2 mb-4 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em]">
                 <Sparkles size={13} />
                 Thanks For Visiting
               </div>
