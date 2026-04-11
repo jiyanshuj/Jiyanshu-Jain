@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Download, Award, Code2, Brain } from 'lucide-react';
+import { ChevronDown, Download, Award, Code2, Brain, Eye } from 'lucide-react';
 import useTypingEffect from '../hooks/useTypingEffect';
 import ParticleBackground from './ParticleBackground';
 
@@ -11,12 +11,44 @@ const stats = [
 ];
 
 const Hero: React.FC = () => {
+  const [showResumeMenu, setShowResumeMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const scrollToAbout = () => {
     const aboutSection = document.getElementById('about');
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const handleDownloadResume = () => {
+    // Download from Google Drive using direct download URL
+    const downloadLink = 'https://drive.google.com/uc?export=download&id=1dQKDmXvQPx1v7Qk3IKPpWJfjtZA4AGLW';
+    const a = document.createElement('a');
+    a.href = downloadLink;
+    a.download = 'Jiyanshu-Jain-Resume.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setShowResumeMenu(false);
+  };
+
+  const handlePreviewResume = () => {
+    window.open('https://drive.google.com/file/d/1dQKDmXvQPx1v7Qk3IKPpWJfjtZA4AGLW/view?usp=sharing', '_blank');
+    setShowResumeMenu(false);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowResumeMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const typingText = useTypingEffect([
     'AI Product Engineer',
@@ -103,17 +135,43 @@ const Hero: React.FC = () => {
             >
               Contact Me
             </motion.a>
-            <motion.a
-              href="https://drive.google.com/file/d/1OUIlZIIZFvnhvsNnl2FxfpIFOzOWQ_u1/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="cert-card flex items-center justify-center gap-2 rounded-xl px-8 py-3 font-medium text-zinc-200 transition-colors hover:border-white/30 hover:bg-white/[0.08]"
-            >
-              <Download size={16} />
-              Download Resume
-            </motion.a>
+            <div ref={menuRef} className="relative">
+              <motion.button
+                onClick={() => setShowResumeMenu(!showResumeMenu)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="cert-card flex items-center justify-center gap-2 rounded-xl px-8 py-3 font-medium text-zinc-200 transition-colors hover:border-white/30 hover:bg-white/[0.08] w-full sm:w-auto"
+              >
+                <Download size={16} />
+                Resume
+                <ChevronDown size={16} className={`transition-transform ${showResumeMenu ? 'rotate-180' : ''}`} />
+              </motion.button>
+
+              {/* Resume dropdown menu */}
+              {showResumeMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute top-full left-0 mt-2 w-full sm:w-48 rounded-xl border border-white/15 bg-white/[0.08] backdrop-blur-md shadow-[0_20px_50px_-30px_rgba(0,0,0,0.7)] overflow-hidden z-50"
+                >
+                  <button
+                    onClick={handleDownloadResume}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-200 hover:bg-white/[0.12] transition-colors border-b border-white/10"
+                  >
+                    <Download size={16} />
+                    Download PDF
+                  </button>
+                  <button
+                    onClick={handlePreviewResume}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-200 hover:bg-white/[0.12] transition-colors"
+                  >
+                    <Eye size={16} />
+                    Preview
+                  </button>
+                </motion.div>
+              )}
+            </div>
           </div>
 
           {/* Stats row */}
