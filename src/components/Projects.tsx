@@ -183,7 +183,7 @@ const Projects: React.FC = () => {
       description:
         'AI-powered campus management ecosystem — 8 production apps with face recognition attendance (KNN), AI notes/PPT/exam generation via Gemini, social forum (FORAM), e-library, fee payment, and e-canteen across 4 role-based panels.',
       image: '/images/Student-Campus-Cloud-Network.png',
-      tags: ['AI', 'Full Stack', 'Campus Management'],
+      tags: ['AI', 'Full Stack', 'Campus Management', 'Machine Learning'],
       technologies: ['React.js', 'FastAPI', 'Gemini API', 'Supabase', 'PostgreSQL', 'KNN', 'OpenCV'],
       githubUrl: 'https://github.com/jiyanshuj/Major-project',
       liveUrl: 'https://neuro-campus-73w8.vercel.app/',
@@ -226,6 +226,18 @@ const Projects: React.FC = () => {
       icon: <FileText className="w-6 h-6" />,
     },
     {
+      id: 13,
+      title: 'QuestionWeaver',
+      description:
+        'Streamlit tool that converts plain-text worksheet prompts into professionally styled .docx files for educators. Intelligently detects question types — Solve, Fill, Translate, Morphology, LCM/HCF, Prime — and applies ABC-branded gradient headers and color-coded sections.',
+      image: '/images/QuestionWeaver.png',
+      tags: ['AI', 'EdTech', 'Python'],
+      technologies: ['Python', 'Streamlit', 'python-docx', 'Regex'],
+      githubUrl: 'https://github.com/jiyanshuj/QuestionWeaver',
+      liveUrl: 'https://questionweaver.streamlit.app/',
+      icon: <FileText className="w-6 h-6" />,
+    },
+    {
       id: 5,
       title: 'HealthGuard AI',
       description:
@@ -255,7 +267,7 @@ const Projects: React.FC = () => {
       description:
         'Built at EY — Production-grade geospatial platform for EV charging infrastructure. Features real-time station search, route optimization, availability tracking, and analytics dashboard with 50K+ station data.',
       image: '/images/EY-EV-Charging.png',
-      tags: ['Full Stack', 'AI'],
+      tags: ['Full Stack', 'AI', 'Machine Learning'],
       technologies: ['React', 'FastAPI', 'GeoPandas', 'XGBoost', 'PostgreSQL', 'Redis', 'Mapbox'],
       githubUrl: '#',
       icon: <Activity className="w-6 h-6" />,
@@ -301,7 +313,7 @@ const Projects: React.FC = () => {
       title: 'Error 404 Travel Planner',
       description:
         'Django web app for smart travel planning. Calculates distance via TomTom API, recommends transport mode (Bus/Train/Flight), and includes a hotel booking system with full payment flow.',
-      image: 'https://images.pexels.com/photos/7412069/pexels-photo-7412069.jpeg',
+      image: '/images/Error-404-Travel-Planner.png.png',
       tags: ['Full Stack', 'Web Development', 'Python'],
       technologies: ['Django', 'Python', 'TomTom API', 'PostgreSQL', 'JavaScript', 'HTML/CSS'],
       githubUrl: 'https://github.com/jiyanshuj/Error-404-v1',
@@ -365,11 +377,10 @@ const Projects: React.FC = () => {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
-                  activeFilter === filter
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${activeFilter === filter
                     ? 'border-[#00a4ef]/45 bg-[#00a4ef]/18 text-[#7dd3fc] shadow-[0_10px_30px_-18px_rgba(0,164,239,0.9)]'
                     : 'cert-card text-zinc-400 hover:border-white/25 hover:text-zinc-200'
-                }`}
+                  }`}
               >
                 {filter}
               </button>

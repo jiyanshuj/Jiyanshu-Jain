@@ -21,12 +21,12 @@ const Skills: React.FC = () => {
     { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', category: 'languages' },
     { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', category: 'languages' },
     { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', category: 'frameworks' },
-    { name: 'Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', category: 'frameworks' },
-    { name: 'Flask', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original-wordmark.svg', category: 'frameworks' },
-    { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', category: 'frameworks' },
+    { name: 'Django', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3YMC5iv-_kdqKG-jBiIDcdkHQ0BoNtbkeZA&s', category: 'frameworks' },
+    { name: 'Flask', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmD38KsMgEwahtWc_Nfs5ZVktP9dBc36MUZA&s', category: 'frameworks' },
+    { name: 'FastAPI', icon: 'https://cdn.worldvectorlogo.com/logos/fastapi.svg', category: 'frameworks' },
     { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', category: 'tools' },
     { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', category: 'tools' },
-    { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', category: 'tools' },
+    { name: 'MongoDB', icon: 'https://images.seeklogo.com/logo-png/48/1/mongodb-logo-png_seeklogo-481256.png', category: 'tools' },
     { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', category: 'tools' },
   ];
 
