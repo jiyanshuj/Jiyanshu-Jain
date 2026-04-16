@@ -7,7 +7,9 @@ type Experience = {
   company: string;
   role: string;
   period: string;
-  description: string;
+  problem: string;
+  solution: string;
+  approach: string;
   technologies: string[];
   color: string;
 };
@@ -15,19 +17,25 @@ type Experience = {
 const experiences: Experience[] = [
   {
     company: 'EY (Ernst & Young)',
-    role: 'Data Science Intern',
+    role: 'AI/ML Engineer',
     period: 'Feb 2026 – Present',
-    description:
-      'XGBoost + AHP pipeline for EV site selection across 3,000+ stations in 9 Indian states. Built GeoPandas spatial queries, Azure Databricks pipelines, and QGIS dashboards for infrastructure decisions.',
+    problem:
+      'No data-driven method to prioritize 3,000+ potential EV charging sites across 9 Indian states — decisions were manual and inconsistent.',
+    solution:
+      'Built an XGBoost + AHP scoring pipeline combining spatial features (POI density, road proximity, demand) with multi-criteria weights to rank sites. Exposed results via QGIS dashboards for infrastructure teams.',
+    approach: 'GeoPandas · XGBoost · AHP · Azure Databricks · PostGIS · FastAPI · QGIS · SHAP',
     technologies: ['GeoPandas', 'XGBoost', 'Azure Databricks', 'PostGIS', 'FastAPI', 'QGIS'],
     color: '#00a4ef',
   },
   {
     company: 'Hired Easy',
-    role: 'Full Stack Developer Intern',
+    role: 'Android / Web Developer',
     period: 'Aug – Nov 2025',
-    description:
-      'ML resume-job matching engine (92% accuracy), Redis-cached job pipeline cutting API latency 55%, and React Native swipe-based job app with AI resume parsing.',
+    problem:
+      'Job seekers spent hours manually matching resumes to listings; API latency made the platform feel slow, hurting retention.',
+    solution:
+      'Built an ML resume-job matching engine (92% accuracy) with Gemini AI parsing. Added Redis caching to the job pipeline, cutting API latency by 55%. Shipped a React Native swipe-based UI for fast browsing.',
+    approach: 'React Native · FastAPI · Gemini AI · MongoDB · Redis · Cloudinary',
     technologies: ['React Native', 'FastAPI', 'Gemini AI', 'MongoDB', 'Redis', 'Cloudinary'],
     color: '#10b981',
   },
@@ -121,8 +129,23 @@ const Experience: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Description */}
-                <p className="text-sm text-zinc-400 leading-relaxed mb-4">{exp.description}</p>
+                {/* PST rows */}
+                <div className="flex flex-col gap-2.5 mb-4">
+                  {[
+                    { label: 'Problem', text: exp.problem, color: 'text-red-300' },
+                    { label: 'Solution', text: exp.solution, color: 'text-emerald-300' },
+                    { label: 'Tech', text: exp.approach, color: 'text-zinc-400' },
+                  ].map(({ label, text, color }) => (
+                    <div key={label} className="flex gap-3">
+                      <span className="flex-shrink-0 w-16 text-[10px] tracking-widest uppercase text-zinc-600 pt-0.5">
+                        {label}
+                      </span>
+                      <p className={`text-xs leading-relaxed border-l border-white/[0.07] pl-2.5 ${color}`}>
+                        {text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
                 {/* Tech tags — stagger in */}
                 <motion.div

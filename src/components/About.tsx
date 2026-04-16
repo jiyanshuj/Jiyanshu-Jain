@@ -7,7 +7,7 @@ const stats = [
   {
     icon: <Briefcase size={22} />,
     label: 'Currently',
-    value: 'Data Science Intern',
+    value: 'AI/ML Engineer',
     sub: '@ EY (Ernst & Young)',
     color: '#00a4ef',
   },
@@ -61,7 +61,7 @@ const About: React.FC = () => {
           </h2>
           <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
           <p className="mx-auto max-w-2xl text-lg text-zinc-400">
-            Most people pick a lane — frontend, backend, or ML. I build all three because real products need all three.
+            Frontend, backend, ML — I build all three because real products need all three.
           </p>
         </motion.div>
 

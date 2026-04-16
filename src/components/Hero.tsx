@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
 
   const handleDownloadResume = () => {
     // Download from Google Drive using direct download URL
-    const downloadLink = 'https://drive.google.com/uc?export=download&id=1dQKDmXvQPx1v7Qk3IKPpWJfjtZA4AGLW';
+    const downloadLink = 'https://drive.google.com/uc?export=download&id=1WuGAAuKewBKncfSe-OBj_6L3jzLbOuuq';
     const a = document.createElement('a');
     a.href = downloadLink;
     a.download = 'Jiyanshu-Jain-Resume.pdf';
@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
   };
 
   const handlePreviewResume = () => {
-    window.open('https://drive.google.com/file/d/1dQKDmXvQPx1v7Qk3IKPpWJfjtZA4AGLW/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1WuGAAuKewBKncfSe-OBj_6L3jzLbOuuq/view?usp=sharing', '_blank');
     setShowResumeMenu(false);
   };
 
@@ -56,6 +56,7 @@ const Hero: React.FC = () => {
     'Full-Stack Dev',
     'Cloud Developer',
     'Data Scientist',
+    'AI/ML Engineer @ EY',
   ]);
 
   return (
@@ -245,7 +246,7 @@ const Hero: React.FC = () => {
               <span className="text-base">💼</span>
               <div>
                 <p className="text-[10px] text-zinc-400 leading-none mb-0.5">Currently</p>
-                <p className="text-xs font-semibold text-white leading-none">Data Science @ EY</p>
+                <p className="text-xs font-semibold text-white leading-none">AI/ML Engineer @ EY</p>
               </div>
             </motion.div>
           </div>
