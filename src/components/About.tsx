@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Briefcase, Award, Rocket, Sparkles } from 'lucide-react';
+import BorderGlow from './BorderGlow';
 
 const stats = [
   {
@@ -74,28 +75,41 @@ const About: React.FC = () => {
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-              className="cert-card rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
             >
-              {/* Icon */}
-              <div
-                className="mb-5 inline-flex rounded-xl border border-white/10 bg-white/[0.06] p-3"
-                style={{ color: s.color }}
+              <BorderGlow
+                backgroundColor="rgba(15, 13, 23, 0.8)"
+                glowColor="200 100 70"
+                borderRadius={16}
+                glowRadius={35}
+                glowIntensity={0.8}
+                edgeSensitivity={25}
+                coneSpread={28}
+                colors={['#a78bfa', '#10b981', '00a4ef']}
+                className="h-full"
               >
-                {s.icon}
-              </div>
+                <div className="p-7 transition-all duration-300">
+                  {/* Icon */}
+                  <div
+                    className="mb-5 inline-flex rounded-xl border border-white/10 bg-white/[0.06] p-3"
+                    style={{ color: s.color }}
+                  >
+                    {s.icon}
+                  </div>
 
-              {/* Label */}
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-zinc-500 mb-1">
-                {s.label}
-              </p>
+                  {/* Label */}
+                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-zinc-500 mb-1">
+                    {s.label}
+                  </p>
 
-              {/* Value */}
-              <p className="text-xl font-bold text-zinc-100 mb-1" style={{ color: s.color }}>
-                {s.value}
-              </p>
+                  {/* Value */}
+                  <p className="text-xl font-bold text-zinc-100 mb-1" style={{ color: s.color }}>
+                    {s.value}
+                  </p>
 
-              {/* Sub */}
-              <p className="text-sm text-zinc-400">{s.sub}</p>
+                  {/* Sub */}
+                  <p className="text-sm text-zinc-400">{s.sub}</p>
+                </div>
+              </BorderGlow>
             </motion.div>
           ))}
         </div>
