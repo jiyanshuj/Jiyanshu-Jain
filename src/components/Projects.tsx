@@ -238,6 +238,17 @@ const Projects: React.FC = () => {
       icon: <FileText className="w-6 h-6" />,
     },
     {
+      id: 14,
+      title: 'SnapAttend',
+      description:
+        'Smart face-recognition attendance platform with live camera capture, student management, auto KNN model training, and real-time attendance tracking dashboard.',
+      image: 'https://raw.githubusercontent.com/jiyanshuj/SnapAttend/main/Home.png',
+      tags: ['AI', 'Full Stack', 'Machine Learning'],
+      technologies: ['Flask', 'React', 'Vite', 'OpenCV', 'scikit-learn', 'SQLite'],
+      githubUrl: 'https://github.com/jiyanshuj/SnapAttend',
+      icon: <Activity className="w-6 h-6" />,
+    },
+    {
       id: 5,
       title: 'HealthGuard AI',
       description:
@@ -378,8 +389,8 @@ const Projects: React.FC = () => {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${activeFilter === filter
-                    ? 'border-[#00a4ef]/45 bg-[#00a4ef]/18 text-[#7dd3fc] shadow-[0_10px_30px_-18px_rgba(0,164,239,0.9)]'
-                    : 'cert-card text-zinc-400 hover:border-white/25 hover:text-zinc-200'
+                  ? 'border-[#00a4ef]/45 bg-[#00a4ef]/18 text-[#7dd3fc] shadow-[0_10px_30px_-18px_rgba(0,164,239,0.9)]'
+                  : 'cert-card text-zinc-400 hover:border-white/25 hover:text-zinc-200'
                   }`}
               >
                 {filter}

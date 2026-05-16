@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
 
   const handleDownloadResume = () => {
     // Download from Google Drive using direct download URL
-    const downloadLink = 'https://drive.google.com/uc?export=download&id=1WuGAAuKewBKncfSe-OBj_6L3jzLbOuuq';
+    const downloadLink = 'https://drive.google.com/uc?export=download&id=1co8VHEzEeGuGTE2ZKOWVMWxd6XSdqTmO';
     const a = document.createElement('a');
     a.href = downloadLink;
     a.download = 'Jiyanshu-Jain-Resume.pdf';
@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
   };
 
   const handlePreviewResume = () => {
-    window.open('https://drive.google.com/file/d/1WuGAAuKewBKncfSe-OBj_6L3jzLbOuuq/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1co8VHEzEeGuGTE2ZKOWVMWxd6XSdqTmO/view?usp=sharing', '_blank');
     setShowResumeMenu(false);
   };
 
