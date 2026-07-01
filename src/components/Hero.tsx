@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
 
   const handleDownloadResume = () => {
     // Download from Google Drive using direct download URL
-    const downloadLink = 'https://drive.google.com/uc?export=download&id=1co8VHEzEeGuGTE2ZKOWVMWxd6XSdqTmO';
+    const downloadLink = 'https://drive.google.com/uc?export=download&id=12Z4x9VABqeYKVjoFydsScDS8uj7KpCw8';
     const a = document.createElement('a');
     a.href = downloadLink;
     a.download = 'Jiyanshu-Jain-Resume.pdf';
@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
   };
 
   const handlePreviewResume = () => {
-    window.open('https://drive.google.com/file/d/1co8VHEzEeGuGTE2ZKOWVMWxd6XSdqTmO/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/12Z4x9VABqeYKVjoFydsScDS8uj7KpCw8/view?usp=sharing', '_blank');
     setShowResumeMenu(false);
   };
 
@@ -66,25 +66,6 @@ const Hero: React.FC = () => {
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_50%_-12%,rgba(30,58,138,0.4),transparent_72%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
-      </div>
-
-      {/* Animated ambient blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl"
-          animate={{ x: [0, 30, 0], y: [0, 50, 0], scale: [1, 1.05, 1] }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-        />
-        <motion.div
-          className="absolute -right-20 top-40 h-96 w-96 rounded-full bg-indigo-400/20 blur-3xl"
-          animate={{ x: [0, -50, 0], y: [0, 30, 0], scale: [1, 1.05, 1] }}
-          transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
-        />
-        <motion.div
-          className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-violet-400/15 blur-3xl"
-          animate={{ x: [0, 40, 0], y: [0, -30, 0], scale: [1, 1.05, 1] }}
-          transition={{ duration: 18, repeat: Infinity, repeatType: "reverse" }}
-        />
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col lg:flex-row items-center justify-center gap-12">
