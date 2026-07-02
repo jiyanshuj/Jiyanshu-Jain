@@ -79,7 +79,7 @@ const ParticleBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
-      style={{ zIndex: 0, width: '100%', height: '100%' }}
+      style={{ zIndex: 1, width: '100%', height: '100%' }}
     />
   );
 };

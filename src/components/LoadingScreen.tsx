@@ -7,10 +7,12 @@ const LoadingScreen: React.FC = () => {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#0a0a0f]"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black"
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_78%_58%_at_50%_-12%,rgba(44,53,120,0.4),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.86)_0%,rgba(0,0,0,0.96)_45%,rgba(0,0,0,1)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_55%_at_50%_-15%,rgba(50,59,130,0.32),transparent_72%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_0%,rgba(0,164,239,0.08),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
       </div>
 

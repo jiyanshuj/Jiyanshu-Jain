@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-    --cert-bg: #0a0a0f;
+    --cert-bg: #000000;
     --cert-text: #f3f4f6;
     --cert-muted: #9ca3af;
     --cert-soft: #6b7280;
@@ -39,7 +39,7 @@ body {
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(ellipse 80% 50% at 50% -20%, #1a1a3e 0%, transparent 70%);
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 40, 80, 0.34) 0%, transparent 70%);
 }
 
 .cert-theme-shell::after {

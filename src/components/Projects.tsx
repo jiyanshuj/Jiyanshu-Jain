@@ -49,13 +49,42 @@ const TerminalStyles = () => (
       font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
       letter-spacing: 0.01em;
     }
-    .group:hover .glass-typewriter {
+    .group:hover .glass-typewriter,
+    [data-open="true"] .glass-typewriter {
       animation:
         glass-typing 0.7s steps(24, end) forwards,
         glass-caret-blink 0.85s step-end infinite 0.7s;
     }
     .glass-cursor {
       animation: glass-label-blink 1s step-start infinite;
+    }
+    /* mobile tap state — forces the popup open independent of :hover,
+       since touch devices don't reliably support hover */
+    [data-open="true"] .glass-overlay {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+      pointer-events: auto !important;
+    }
+    /* no ugly blue flash / double-tap zoom delay on tap */
+    .cert-card {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    /* tapped-open cards need the same z-index lift hover gives on desktop,
+       so the breakout popup isn't covered by sibling cards */
+    .cert-card[data-open="true"] {
+      z-index: 40;
+    }
+    /* hide the native scrollbar on the popup panel — scrolling still works,
+       the bar itself just isn't rendered (Chrome/Safari + Firefox + IE/Edge) */
+    .no-scrollbar {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
     }
   `}</style>
 );
@@ -75,7 +104,8 @@ const GlassLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 const GlassOverlay: React.FC<{ project: Project }> = ({ project }) => (
   <div
     className="
-      pointer-events-none absolute -inset-4 sm:-inset-8 z-50
+      glass-overlay
+      pointer-events-none absolute -inset-3 sm:-inset-6 md:-inset-8 z-50
       flex items-center justify-center
       opacity-0 scale-90
       transition-all duration-300 ease-out
@@ -84,7 +114,8 @@ const GlassOverlay: React.FC<{ project: Project }> = ({ project }) => (
   >
     <div
       className="
-        relative w-full max-w-sm rounded-2xl border border-white/12
+        relative w-[min(90vw,24rem)] max-h-[calc(100vh-2rem)] overflow-y-auto overflow-x-hidden no-scrollbar
+        rounded-2xl border border-white/12
         bg-[#0a0a0b]/80 backdrop-blur-2xl
         shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.08)]
         p-5
@@ -154,6 +185,7 @@ const GlassOverlay: React.FC<{ project: Project }> = ({ project }) => (
           href={project.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1 rounded-md border border-white/25 bg-white/[0.10] backdrop-blur-md px-3 py-1 text-xs font-medium text-zinc-100 transition-colors hover:bg-white/[0.18]"
         >
           <Github size={13} />
@@ -164,6 +196,7 @@ const GlassOverlay: React.FC<{ project: Project }> = ({ project }) => (
             href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             className="flex items-center gap-1 rounded-md border border-[#00a4ef]/45 bg-[#00a4ef]/15 backdrop-blur-md px-3 py-1 text-xs font-medium text-[#7dd3fc] transition-colors hover:bg-[#00a4ef]/25"
           >
             <ExternalLink size={13} />
@@ -176,10 +209,29 @@ const GlassOverlay: React.FC<{ project: Project }> = ({ project }) => (
 );
 
 /* ─── Phone frame card ─── */
-const PhoneCard: React.FC<{ project: Project }> = ({ project }) => (
+const PhoneCard: React.FC<{ project: Project; isOpen: boolean; onToggle: (id: number) => void }> = ({
+  project,
+  isOpen,
+  onToggle,
+}) => (
   <motion.div
     variants={itemVariants}
-    className="group cert-card relative h-80 overflow-visible rounded-2xl transition-all duration-300 hover:z-40 hover:-translate-y-1 hover:border-white/20"
+    data-open={isOpen ? 'true' : undefined}
+    role="button"
+    tabIndex={0}
+    aria-expanded={isOpen}
+    aria-label={`View details for ${project.title}`}
+    onClick={(e) => {
+      e.stopPropagation();
+      onToggle(project.id);
+    }}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onToggle(project.id);
+      }
+    }}
+    className="group cert-card relative h-80 overflow-visible rounded-2xl transition-all duration-300 hover:z-40 hover:-translate-y-1 hover:border-white/20 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dd3fc]"
   >
     {/* clipped media layer */}
     <div className="absolute inset-0 overflow-hidden rounded-2xl">
@@ -220,10 +272,29 @@ const PhoneCard: React.FC<{ project: Project }> = ({ project }) => (
 );
 
 /* ─── Standard card ─── */
-const StandardCard: React.FC<{ project: Project }> = ({ project }) => (
+const StandardCard: React.FC<{ project: Project; isOpen: boolean; onToggle: (id: number) => void }> = ({
+  project,
+  isOpen,
+  onToggle,
+}) => (
   <motion.div
     variants={itemVariants}
-    className="group cert-card relative h-72 overflow-visible rounded-2xl transition-all duration-300 hover:z-40 hover:-translate-y-1 hover:border-white/20"
+    data-open={isOpen ? 'true' : undefined}
+    role="button"
+    tabIndex={0}
+    aria-expanded={isOpen}
+    aria-label={`View details for ${project.title}`}
+    onClick={(e) => {
+      e.stopPropagation();
+      onToggle(project.id);
+    }}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onToggle(project.id);
+      }
+    }}
+    className="group cert-card relative h-72 overflow-visible rounded-2xl transition-all duration-300 hover:z-40 hover:-translate-y-1 hover:border-white/20 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dd3fc]"
   >
     {/* clipped media layer */}
     <div className="absolute inset-0 overflow-hidden rounded-2xl">
@@ -246,19 +317,34 @@ const StandardCard: React.FC<{ project: Project }> = ({ project }) => (
 const Projects: React.FC = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [activeFilter, setActiveFilter] = useState<string>('All');
+  // tracks which card's popup is tap-opened on mobile/touch (desktop still uses hover)
+  const [openId, setOpenId] = useState<number | null>(null);
+  const handleToggle = (id: number) => setOpenId((prev) => (prev === id ? null : id));
 
   const projects: Project[] = [
     {
       id: 1,
-      title: 'Student Campus Cloud Network',
+      title: 'Campus Cloud Network',
       description:
         'AI-powered campus management ecosystem — 8 production apps with face recognition attendance (KNN), AI notes/PPT/exam generation via Gemini, social forum (FORAM), e-library, fee payment, and e-canteen across 4 role-based panels.',
-      problem: 'Campus tools are scattered across disconnected systems, giving students a fragmented experience.',
-      solution: 'A single cloud ecosystem covering attendance, notes, exams, forum, library, fees, and canteen.',
-      differentiators: ['8 production apps, 4 role-based panels', 'Face-recognition attendance (KNN)', 'AI-generated notes, PPTs & exams'],
+      problem: 'New ERP rollout meant more manual work for students & faculty, not less.',
+      solution: 'One platform — AutoSlideX, PaperVista, career guidance & 5 more — automating attendance, exams, forum & resumes.',
+      differentiators: ['8 sub-apps: AutoSlideX, PaperVista, forum, career guidance & more', 'Face-recognition self-attendance (KNN)', 'Replaces manual ERP workflows end-to-end'],
       image: '/images/Student-Campus-Cloud-Network.png',
       tags: ['AI', 'Full Stack', 'Campus Management', 'Machine Learning'],
-      technologies: ['React.js', 'FastAPI', 'Gemini API', 'Supabase', 'PostgreSQL', 'KNN', 'OpenCV'],
+      technologies: [
+        'React', 'TypeScript', 'JavaScript', 'Vite',
+        'Python', 'Flask', 'FastAPI',
+        'Gemini API', 'Generative AI', 'NLP', 'Machine Learning',
+        'KNN', 'OpenCV', 'dlib', 'scikit-learn', 'NumPy', 'TensorFlow',
+        'Supabase', 'Supabase Storage', 'PostgreSQL', 'SQL', 'RDBMS',
+        'Clerk API', 'JWT', 'bcryptjs', 'REST API', 'JSON',
+        'Cloudinary', 'Google Custom Search API', 'Pydantic',
+        'python-pptx', 'python-docx',
+        'Tailwind CSS', 'Framer Motion', 'Lucide React',
+        'Netlify', 'Vercel', 'Render',
+        'Prettier', 'ESLint', 'PostCSS',
+      ],
       githubUrl: 'https://github.com/jiyanshuj/Major-project',
       liveUrl: 'https://neuro-campus-73w8.vercel.app/',
       icon: <GraduationCap className="w-6 h-6" />,
@@ -268,12 +354,19 @@ const Projects: React.FC = () => {
       title: 'Smart Career Guidance System',
       description:
         'AI-driven career assessment platform with adaptive quizzes across 6 CS domains (OS, DBMS, Networks, Aptitude, Verbal, Programming), Gemini-generated questions, and a performance analytics dashboard.',
-      problem: 'Students lack a structured, data-driven way to assess their career readiness in CS.',
-      solution: 'Adaptive quiz engine spanning 6 domains, with AI-generated questions and analytics dashboard.',
-      differentiators: ['Gemini-generated adaptive questions', '6 domain-specific assessments', 'Visual performance analytics'],
+      problem: 'Students don\u2019t know which technical domain actually fits their strengths.',
+      solution: '30-question adaptive quizzes across 6 CS domains, with AI-generated questions and career analytics.',
+      differentiators: ['6 domains: OS, DBMS, Networks, Aptitude, Verbal, Programming', 'Gemini-generated questions, instant feedback, timed', 'Analytics dashboard + career recommendations'],
       image: '/images/Smart-Career-Guidance-System.png',
       tags: ['AI', 'EdTech', 'Full Stack'],
-      technologies: ['React.js', 'TypeScript', 'Flask', 'Clerk', 'Supabase', 'Gemini API', 'REST API'],
+      technologies: [
+        'React.js', 'TypeScript', 'JavaScript', 'Vite',
+        'Python', 'Flask', 'FastAPI',
+        'Gemini API', 'Generative AI',
+        'Clerk API', 'REST API', 'JSON',
+        'Tailwind CSS', 'Framer Motion', 'Lucide React',
+        'Vercel', 'Netlify',
+      ],
       githubUrl: 'https://github.com/jiyanshuj/Smart-Career-Guidance-System',
       liveUrl: 'https://smart-career-guidance-system.vercel.app/',
       icon: <Compass className="w-6 h-6" />,
@@ -283,12 +376,16 @@ const Projects: React.FC = () => {
       title: 'AutoSlideX',
       description:
         'AI presentation generator — enter a topic and slide count, Gemini creates structured content with professional layouts, context-aware image fetching, and exports to PowerPoint (.pptx).',
-      problem: 'Building presentations from scratch is slow and design-heavy.',
-      solution: 'Generate full, ready-to-use decks from just a topic and slide count.',
-      differentiators: ['Context-aware image fetching', 'Auto professional layouts', 'One-click .pptx export'],
+      problem: 'Building PPTs & finding the right diagrams eats up teachers\u2019 time.',
+      solution: 'AI pulls verified diagrams (GDG, W3Schools) and summarizes each topic into slides.',
+      differentiators: ['Verified-source image search (GDG, W3Schools)', 'Auto-summarized topic content', 'One-click .pptx export'],
       image: '/images/AutoSlideX.png',
       tags: ['AI', 'Productivity'],
-      technologies: ['React', 'FastAPI', 'Python', 'Gemini API', 'Google Custom Search API', 'python-pptx'],
+      technologies: [
+        'React 19.1', 'Vite 7.1', 'Tailwind CSS 3.4', 'Lucide React', 'ESLint',
+        'FastAPI', 'Uvicorn', 'Gemini API', 'Google Custom Search API',
+        'python-pptx', 'Pydantic', 'Pillow',
+      ],
       githubUrl: 'https://github.com/jiyanshuj/AutoSlideX',
       liveUrl: 'https://auto-slide-x.vercel.app/',
       icon: <Presentation className="w-6 h-6" />,
@@ -303,38 +400,35 @@ const Projects: React.FC = () => {
       differentiators: ['3 exam format templates', 'Configurable difficulty levels', 'Print-ready output'],
       image: '/images/PaperVista.png',
       tags: ['AI', 'EdTech'],
-      technologies: ['React', 'FastAPI', 'Python', 'Gemini API', 'Pydantic', 'REST API'],
+      technologies: [
+        'React 19.1', 'Vite 7.1', 'Tailwind CSS 3.4', 'PostCSS', 'Lucide React',
+        'FastAPI', 'Uvicorn', 'Gemini API', 'Pydantic', 'Python 3.11',
+      ],
       githubUrl: 'https://github.com/jiyanshuj/PaperVista',
       liveUrl: 'https://paper-vista-five.vercel.app/',
       icon: <FileText className="w-6 h-6" />,
     },
     {
-      id: 13,
-      title: 'QuestionWeaver',
+      id: 7,
+      title: 'EV Site Suitability Analysis',
       description:
-        'Streamlit tool that converts plain-text worksheet prompts into professionally styled .docx files for educators. Intelligently detects question types — Solve, Fill, Translate, Morphology, LCM/HCF, Prime — and applies ABC-branded gradient headers and color-coded sections.',
-      problem: 'Formatting worksheets into polished documents eats into teachers\u2019 prep time.',
-      solution: 'Converts plain text prompts into branded, styled .docx worksheets automatically.',
-      differentiators: ['Auto question-type detection', 'Gradient branded headers', 'Color-coded sections'],
-      image: '/images/QuestionWeaver.png',
-      tags: ['AI', 'EdTech', 'Python'],
-      technologies: ['Python', 'Streamlit', 'python-docx', 'Regex'],
-      githubUrl: 'https://github.com/jiyanshuj/QuestionWeaver',
-      liveUrl: 'https://questionweaver.streamlit.app/',
-      icon: <FileText className="w-6 h-6" />,
-    },
-    {
-      id: 14,
-      title: 'SnapAttend',
-      description:
-        'Smart face-recognition attendance platform with live camera capture, student management, auto KNN model training, and real-time attendance tracking dashboard.',
-      problem: 'Manual attendance-taking is slow, error-prone, and easy to fudge.',
-      solution: 'Live face-recognition attendance with an auto-trained model and real-time dashboard.',
-      differentiators: ['Live camera capture', 'Auto model retraining', 'Real-time tracking dashboard'],
-      image: 'https://raw.githubusercontent.com/jiyanshuj/SnapAttend/main/Home.png',
-      tags: ['AI', 'Full Stack', 'Machine Learning'],
-      technologies: ['Flask', 'React', 'Vite', 'OpenCV', 'scikit-learn', 'SQLite'],
-      githubUrl: 'https://github.com/jiyanshuj/SnapAttend',
+        'ML and decision-analysis pipeline for selecting the best EV charging station locations in India, combining transaction, traffic, telecom, and grid data to rank candidate sites by demand, readiness, and financial viability.',
+      problem: 'Where should new EV stations go so they get used and stay financially viable?',
+      solution: 'ML + AHP pipeline scores candidate sites across India on demand, infrastructure & ROI.',
+      differentiators: [
+        'XGBoost models: kWh demand, utilization & success probability',
+        'AHP ranks sites on 6 criteria (traffic, grid, EV adoption...)',
+        'NPV/ROI/payback filtering, 30km minimum site spacing',
+        'Flask API + Folium maps, tunneled via ngrok',
+      ],
+      image: '/images/EY-EV-Charging.png',
+      tags: ['Full Stack', 'AI', 'Machine Learning'],
+      technologies: [
+        'Python', 'Pandas', 'NumPy', 'scikit-learn', 'XGBoost',
+        'Matplotlib', 'Seaborn', 'Joblib', 'GeoPandas', 'Shapely', 'Folium',
+        'AHP', 'Flask', 'Flask-CORS', 'ngrok', 'Jupyter',
+      ],
+      githubUrl: '#',
       icon: <Activity className="w-6 h-6" />,
     },
     {
@@ -368,17 +462,17 @@ const Projects: React.FC = () => {
       icon: <FileText className="w-6 h-6" />,
     },
     {
-      id: 7,
-      title: 'EY EV Charging Station Locator',
+      id: 14,
+      title: 'SnapAttend',
       description:
-        'Built at EY — Production-grade geospatial platform for EV charging infrastructure. Features real-time station search, route optimization, availability tracking, and analytics dashboard with 50K+ station data.',
-      problem: 'EV drivers struggle to find reliable, available charging stations on long routes.',
-      solution: 'Geospatial platform with real-time search, routing, and availability across 50K+ stations.',
-      differentiators: ['ML-based availability prediction (XGBoost)', 'Route optimization', '50K+ station dataset'],
-      image: '/images/EY-EV-Charging.png',
-      tags: ['Full Stack', 'AI', 'Machine Learning'],
-      technologies: ['React', 'FastAPI', 'GeoPandas', 'XGBoost', 'PostgreSQL', 'Redis', 'Mapbox'],
-      githubUrl: '#',
+        'Smart face-recognition attendance platform with live camera capture, student management, auto KNN model training, and real-time attendance tracking dashboard.',
+      problem: 'Manual attendance-taking is slow, error-prone, and easy to fudge.',
+      solution: 'Live face-recognition attendance with an auto-trained model and real-time dashboard.',
+      differentiators: ['Live camera capture', 'Auto model retraining', 'Real-time tracking dashboard'],
+      image: 'https://raw.githubusercontent.com/jiyanshuj/SnapAttend/main/Home.png',
+      tags: ['AI', 'Full Stack', 'Machine Learning'],
+      technologies: ['Flask', 'React', 'Vite', 'OpenCV', 'scikit-learn', 'SQLite'],
+      githubUrl: 'https://github.com/jiyanshuj/SnapAttend',
       icon: <Activity className="w-6 h-6" />,
     },
     {
@@ -471,10 +565,10 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" ref={ref} className="relative overflow-hidden bg-transparent py-24">
+    <section id="projects" ref={ref} className="relative overflow-x-hidden bg-transparent py-24">
       <TerminalStyles />
 
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_-15%,rgba(52,60,130,0.34),transparent_72%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:42px_42px] opacity-35" />
       </div>
@@ -518,13 +612,24 @@ const Projects: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
+          onClick={() => setOpenId(null)}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {filteredProjects.map((project) =>
             project.displayType === 'phone' ? (
-              <PhoneCard key={project.id} project={project} />
+              <PhoneCard
+                key={project.id}
+                project={project}
+                isOpen={openId === project.id}
+                onToggle={handleToggle}
+              />
             ) : (
-              <StandardCard key={project.id} project={project} />
+              <StandardCard
+                key={project.id}
+                project={project}
+                isOpen={openId === project.id}
+                onToggle={handleToggle}
+              />
             )
           )}
         </motion.div>
