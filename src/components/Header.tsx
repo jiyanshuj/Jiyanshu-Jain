@@ -66,8 +66,13 @@ const Header: React.FC = () => {
               <motion.li
                 key={link.id}
                 whileHover={{ y: -2 }}
-                className="cursor-pointer font-medium text-zinc-400 transition-colors hover:text-[#7dd3fc]"
+                className="cursor-pointer font-medium text-zinc-400 transition-colors hover:text-[#7dd3fc] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7dd3fc] focus-visible:rounded"
+                tabIndex={0}
+                role="button"
                 onClick={() => scrollToSection(link.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') scrollToSection(link.id);
+                }}
               >
                 {link.name}
               </motion.li>
@@ -88,7 +93,7 @@ const Header: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -3, scale: 1.1 }}
-                className="rounded-lg border border-transparent p-2 text-zinc-400 transition-all hover:border-white/10 hover:bg-white/[0.05] hover:text-[#7dd3fc]"
+                className="rounded-lg border border-transparent p-2 text-zinc-400 transition-all hover:border-white/10 hover:bg-white/[0.05] hover:text-[#7dd3fc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dd3fc]"
               >
                 {link.icon}
               </motion.a>
@@ -98,7 +103,7 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-zinc-300"
+          className="md:hidden text-zinc-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7dd3fc] focus-visible:rounded"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -119,7 +124,7 @@ const Header: React.FC = () => {
               {navLinks.map((link) => (
                 <li key={link.id}>
                   <button
-                    className="w-full py-2 text-left font-medium text-zinc-300 transition-colors hover:text-[#7dd3fc]"
+                      className="w-full py-2 text-left font-medium text-zinc-300 transition-colors hover:text-[#7dd3fc] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7dd3fc] focus-visible:rounded"
                     onClick={() => scrollToSection(link.id)}
                   >
                     {link.name}
@@ -135,7 +140,7 @@ const Header: React.FC = () => {
                   aria-label={link.label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-white/10 bg-white/[0.04] p-2 text-zinc-400 transition-colors hover:text-[#7dd3fc]"
+                  className="rounded-lg border border-white/10 bg-white/[0.04] p-2 text-zinc-400 transition-colors hover:text-[#7dd3fc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7dd3fc]"
                 >
                   {link.icon}
                 </a>

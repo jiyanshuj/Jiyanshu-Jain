@@ -1,11 +1,14 @@
 import React, { useRef, useEffect } from 'react';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isVisibleRef = useRef(true);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || reducedMotion) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -15,6 +18,21 @@ const ParticleBackground: React.FC = () => {
     };
     resize();
     window.addEventListener('resize', resize);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+
+        if (entry.isIntersecting) {
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(canvas);
 
     const particles: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
     const count = 80;
@@ -30,8 +48,28 @@ const ParticleBackground: React.FC = () => {
       });
     }
 
-    let raf: number;
+    let raf: number | null = null;
+
+    const stopAnimation = () => {
+      if (raf !== null) {
+        cancelAnimationFrame(raf);
+        raf = null;
+      }
+    };
+
+    const startAnimation = () => {
+      if (raf === null) {
+        raf = requestAnimationFrame(draw);
+      }
+    };
+
     const draw = () => {
+      raf = null;
+
+      if (!isVisibleRef.current) {
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((p) => {
@@ -65,20 +103,27 @@ const ParticleBackground: React.FC = () => {
         }
       }
 
-      raf = requestAnimationFrame(draw);
+      startAnimation();
     };
-    draw();
+
+    startAnimation();
 
     return () => {
-      cancelAnimationFrame(raf);
+      stopAnimation();
       window.removeEventListener('resize', resize);
+      observer.disconnect();
     };
-  }, []);
+  }, [reducedMotion]);
+
+  if (reducedMotion) {
+    return null;
+  }
 
   return (
     <canvas
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
+      aria-hidden="true"
       style={{ zIndex: 1, width: '100%', height: '100%' }}
     />
   );

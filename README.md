@@ -189,7 +189,7 @@ The hero section features:
 
 ### 1. **Student Campus Cloud Network**
 A full-stack, cloud-based smart campus management system integrating:
-- AI-powered attendance (face recognition)
+- AI-powered attendance with a limitation-aware face-recognition workflow and location-based verification
 - PaperVista (AI question paper generation)
 - AutoSlideX (AI presentation generation)
 - Smart Career Guidance

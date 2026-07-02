@@ -1,62 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-gsap.registerPlugin(ScrollTrigger);
+import React, { Suspense, useEffect, useState } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
-import Skills from './components/Skills';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Certifications from './components/Certifications';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import VisitorCounter from './components/VisitorCounter';
 import LoadingScreen from './components/LoadingScreen';
+
+const Skills = React.lazy(() => import('./components/Skills'));
+const Experience = React.lazy(() => import('./components/Experience'));
+const Projects = React.lazy(() => import('./components/Projects'));
+const Certifications = React.lazy(() => import('./components/Certifications'));
+const Contact = React.lazy(() => import('./components/Contact'));
+const Footer = React.lazy(() => import('./components/Footer'));
 
 function App() {
   const [loading, setLoading] = useState(true);
 
-  // Lock the portfolio to dark mode.
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.classList.add('dark');
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    let cancelled = false;
 
-  useEffect(() => {
-    if (loading) return;
-    const timer = setTimeout(() => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-      const sections = gsap.utils.toArray<HTMLElement>('main > section:not(:first-child):not(#certifications)');
-      sections.forEach((section) => {
-        gsap.fromTo(
-          section,
-          { opacity: 0, y: 48 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 88%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      });
-    }, 100);
+    const ready = Promise.race([
+      // Resolves immediately when font loading APIs are unavailable.
+      document.fonts?.ready ?? Promise.resolve(),
+      // Hard cap so a slow connection never blocks the first render for long.
+      new Promise((resolve) => setTimeout(resolve, 800)),
+    ]);
+
+    ready.then(() => {
+      if (!cancelled) setLoading(false);
+    });
+
     return () => {
-      clearTimeout(timer);
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      cancelled = true;
     };
-  }, [loading]);
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -69,13 +49,17 @@ function App() {
       <main className="relative z-10">
         <Hero />
         <About />
-        <Experience />
-        <Skills />
-        <Projects />
-        <Certifications />
-        <Contact />
+        <Suspense fallback={null}>
+          <Experience />
+          <Skills />
+          <Projects />
+          <Certifications />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </div>
   );
 }
