@@ -17,6 +17,7 @@ type OrgGroup = {
 };
 
 const certData: Cert[] = [
+  { id: 23, org: "Microsoft", color: "#00a4ef", title: "Fabric Analytics Engineer Associate (DP-700)", description: "Passed the DP-700 exam covering Microsoft Fabric, data ingestion, transformation, semantic models, and analytics engineering.", date: "Jul 2026", credential: "" },
   { id: 1, org: "Microsoft", color: "#00a4ef", title: "Azure AI Fundamentals (AI-900)", description: "Passed the AI-900 exam covering AI workloads, machine learning, computer vision, NLP, and generative AI on Azure.", date: "May 2024", credential: "F46BFAA4E1353162" },
   { id: 2, org: "Microsoft", color: "#00a4ef", title: "Microsoft AI Skills Challenge", description: "Completed the Microsoft AI Skills Challenge covering AI and Azure fundamentals, recognized by the President of Microsoft India & South Asia.", date: "Jan 2024" },
   { id: 3, org: "Microsoft", color: "#00a4ef", title: "Asia AI Odyssey Challenge", description: "Completed the Asia AI Odyssey Challenge, an intensive Microsoft Learn program focused on AI skills across the Asia region.", date: "May 2024" },
