@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { Users } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 
+/* Sits in the footer as plain text. Renders nothing until a real count exists,
+   so a missing Supabase config never shows a broken "..." pill. */
 const VisitorCounter: React.FC = () => {
   const [count, setCount] = useState<number | null>(null);
 
@@ -45,20 +46,13 @@ const VisitorCounter: React.FC = () => {
     fetchCount();
   }, []);
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -1, scale: 1.02 }}
-      className="hidden sm:flex fixed bottom-6 left-6 z-50 items-center gap-2 rounded-full border border-white/15 bg-[#0a0a0f]/75 px-4 py-2 text-zinc-200 shadow-[0_14px_40px_-20px_rgba(0,0,0,0.95)] backdrop-blur-md"
+  if (count === null) return null;
 
-    >
-      <Users size={18} className="text-[#00a4ef]" />
-      <span className="font-medium text-zinc-300">
-        {count !== null ? `${count.toLocaleString()} visitors` : '...'}
-      </span>
-    </motion.div>
+  return (
+    <span className="inline-flex items-center gap-2 text-sm text-[var(--muted)]">
+      <Users size={14} className="text-[var(--accent)]" aria-hidden="true" />
+      {count.toLocaleString()} visitors
+    </span>
   );
 };
 

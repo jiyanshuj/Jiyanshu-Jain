@@ -35,9 +35,9 @@
     z-index: -1;
 }
 
-.border-glow-card:not(:hover):not(.sweep-active)::before,
-.border-glow-card:not(:hover):not(.sweep-active)::after,
-.border-glow-card:not(:hover):not(.sweep-active)>.edge-light {
+.border-glow-card:not(:hover)::before,
+.border-glow-card:not(:hover)::after,
+.border-glow-card:not(:hover)>.edge-light {
     opacity: 0;
     transition: opacity 0.75s ease-in-out;
 }
@@ -133,5 +133,10 @@
     flex-direction: column;
     position: relative;
     overflow: auto;
+    scrollbar-width: none;
     z-index: 1;
+}
+
+.border-glow-inner::-webkit-scrollbar {
+    display: none;
 }

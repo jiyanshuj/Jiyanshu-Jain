@@ -1,31 +1,44 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronDown, Download, Award, Code2, Brain, Eye } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Download, Eye, Code2, Award, Brain } from 'lucide-react';
 import useTypingEffect from '../hooks/useTypingEffect';
-import ParticleBackground from './ParticleBackground';
+import { contact } from '../data/portfolio';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 const stats = [
-  { icon: <Code2 size={14} />, label: "Open Source Repos", value: "20+" },
-  { icon: <Award size={14} />, label: "Live Products", value: "8+" },
-  { icon: <Brain size={14} />, label: "AI/ML Solutions", value: "10+" },
+  { icon: <Code2 size={15} />, label: 'Open Source Repos', value: '20+' },
+  { icon: <Award size={15} />, label: 'Live Products', value: '7' },
+  { icon: <Brain size={15} />, label: 'AI/ML Solutions', value: '10+' },
 ];
 
-const Hero: React.FC = () => {
+export default function Hero() {
+  const reduced = usePrefersReducedMotion();
   const [showResumeMenu, setShowResumeMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  // One fixed headline role (AI/ML Engineer). The typing line only varies WHAT I build.
+  const typingText = useTypingEffect([
+    'geospatial ML systems',
+    'full-stack AI products',
+    'data pipelines on Azure',
+    'explainable ML models',
+  ], 120, 70, 1600);
 
+  // Close resume menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowResumeMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Both resume actions now read from data/portfolio.ts, so there is one source of truth.
   const handleDownloadResume = () => {
-    // Download from Google Drive using direct download URL
-    const downloadLink = 'https://drive.google.com/uc?export=download&id=12Z4x9VABqeYKVjoFydsScDS8uj7KpCw8';
     const a = document.createElement('a');
-    a.href = downloadLink;
+    a.href = contact.resumeDownload;
     a.download = 'Jiyanshu-Jain-Resume.pdf';
     document.body.appendChild(a);
     a.click();
@@ -34,220 +47,194 @@ const Hero: React.FC = () => {
   };
 
   const handlePreviewResume = () => {
-    window.open('https://drive.google.com/file/d/12Z4x9VABqeYKVjoFydsScDS8uj7KpCw8/view?usp=sharing', '_blank');
+    window.open(contact.resume, '_blank', 'noopener,noreferrer');
     setShowResumeMenu(false);
   };
 
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowResumeMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const typingText = useTypingEffect([
-    'AI Product Engineer',
-    'ML Builder',
-    'Full-Stack Dev',
-    'Cloud Developer',
-    'Data Scientist',
-    'AI/ML Engineer @ EY',
-  ]);
+  const scrollToExperience = () => {
+    const el = document.getElementById('experience');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black pb-24 pt-16">
-      <ParticleBackground />
+    <section id="top" className="relative flex min-h-[calc(100svh-3.5rem)] items-center justify-center overflow-hidden" aria-label="Hero Introduction">
+      <div className="hero-glass-panel page-width relative z-10 w-full flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14">
 
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.86)_0%,rgba(0,0,0,0.96)_45%,rgba(0,0,0,1)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_55%_at_50%_-15%,rgba(50,59,130,0.32),transparent_72%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_0%,rgba(0,164,239,0.08),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_55%,transparent_20%,rgba(0,0,0,0.30)_72%,rgba(0,0,0,0.60)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:42px_42px] opacity-30" />
-      </div>
-
-      <div className="container mx-auto px-4 md:px-6 relative z-10 flex flex-col lg:flex-row items-center justify-center gap-12">
-
-        {/* ── Left: Text ── */}
+        {/* ── Left Column: Identity, Role, CTAs, Stats ── */}
         <motion.div
-          className="lg:w-1/2 text-center lg:text-left"
-          initial={{ opacity: 0, y: 20 }}
+          className="hero-copy w-full lg:w-7/12 text-center lg:text-left flex flex-col items-center lg:items-start"
+          initial={reduced ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Kicker badge */}
-          <div className="cert-kicker mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#38bdf8] animate-pulse" />
-            Available For Projects
-          </div>
-
           {/* Name */}
-          <h1 className="cert-title mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">
-            <span className="bg-gradient-to-r from-white to-zinc-200 bg-clip-text text-transparent">
-              Jiyanshu Jain
-            </span>
+          <h1 className="mb-2 text-4xl font-medium tracking-[-0.045em] text-[var(--text)] sm:text-5xl lg:text-7xl">
+            Jiyanshu Jain
           </h1>
 
-          {/* Typing role */}
-          <p className="mb-6 text-xl text-zinc-400 md:text-2xl">
-            A passionate{' '}
-            <span className="font-semibold text-[#38bdf8]">
-              {typingText}<span className="animate-blink">|</span>
+          {/* Fixed headline role */}
+          <p className="mb-2 text-xl font-semibold text-[var(--text)] sm:text-2xl md:text-3xl">
+            AI/ML Engineer
+          </p>
+
+          {/* Typing line: what I build */}
+          <p className="mb-5 max-w-full text-lg font-medium text-[var(--muted-strong)] sm:text-xl md:text-2xl">
+            I build{' '}
+            <span className="font-accent italic font-normal text-xl sm:text-2xl md:text-3xl text-[var(--text)]">
+              {typingText}
+              <span className="inline-block w-0.5 h-6 ml-1 bg-[var(--text)] align-middle animate-pulse" />
             </span>
           </p>
 
-          {/* Portfolio-aligned summary */}
-          <p className="mb-8 text-sm text-zinc-500 leading-relaxed max-w-md mx-auto lg:mx-0">
-            AI products across{' '}
-            <span className="text-zinc-300">EdTech</span>,{' '}
-            <span className="text-zinc-300">HealthTech</span>, and{' '}
-            <span className="text-zinc-300">Geospatial ML</span>{' '}
-            — built end to end, deployed for real.
+          {/* Summary */}
+          <p className="mb-4 max-w-lg text-sm leading-relaxed text-[var(--muted)]">
+            Former AI/ML Engineer Intern at <span className="font-semibold text-[var(--text)]">EY</span>. AI products across{' '}
+            <span className="font-semibold text-[var(--text)]">EdTech</span>,{' '}
+            <span className="font-semibold text-[var(--text)]">HealthTech</span> and{' '}
+            <span className="font-semibold text-[var(--text)]">Geospatial ML</span>, built end to end.
           </p>
 
-          {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-            <motion.a
+          {/* Core Product Philosophy Tagline */}
+          <div className="mb-7 inline-flex items-center border-l-2 border-[var(--accent)] pl-3 text-xs sm:text-sm font-medium text-[var(--text)] max-w-lg text-left">
+            <span>Frontend, backend, ML — I build all three because real products need all three.</span>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="mb-8 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+            <a
               href="#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="rounded-xl border border-[#38bdf8]/40 bg-[#38bdf8]/20 px-8 py-3 font-medium text-white shadow-[0_18px_40px_-25px_rgba(56,189,248,0.65)] transition-colors hover:bg-[#38bdf8]/30"
+              className="focus-ring inline-flex items-center justify-center min-h-[2.85rem] px-7 rounded-full bg-[var(--accent)] text-[var(--accent-ink)] font-bold text-sm shadow-[0_4px_16px_var(--accent-soft)] transition-transform hover:-translate-y-0.5 no-underline"
             >
               Contact Me
-            </motion.a>
-            <div ref={menuRef} className="relative">
-              <motion.button
-                onClick={() => setShowResumeMenu(!showResumeMenu)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="cert-card flex items-center justify-center gap-2 rounded-xl px-8 py-3 font-medium text-zinc-200 transition-colors hover:border-white/30 hover:bg-white/[0.08] w-full sm:w-auto"
-              >
-                <Download size={16} />
-                Resume
-                <ChevronDown size={16} className={`transition-transform ${showResumeMenu ? 'rotate-180' : ''}`} />
-              </motion.button>
+            </a>
 
-              {/* Resume dropdown menu */}
-              {showResumeMenu && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute top-full left-0 mt-2 w-full sm:w-48 rounded-xl border border-white/15 bg-white/[0.08] backdrop-blur-md shadow-[0_20px_50px_-30px_rgba(0,0,0,0.7)] overflow-hidden z-50"
-                >
-                  <button
-                    onClick={handleDownloadResume}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-200 hover:bg-white/[0.12] transition-colors border-b border-white/10"
+            {/* Resume Dropdown Menu */}
+            <div className="relative" ref={menuRef}>
+              <button
+                type="button"
+                onClick={() => setShowResumeMenu((v) => !v)}
+                aria-expanded={showResumeMenu}
+                aria-haspopup="true"
+                className="focus-ring inline-flex items-center gap-2 min-h-[2.85rem] px-6 rounded-full border border-[var(--line-strong)] bg-[var(--panel)] text-[var(--text)] font-semibold text-sm transition-colors hover:border-[var(--text)] hover:bg-[var(--bg-elevated)]"
+              >
+                <span>Resume</span>
+                <ChevronDown size={15} className={`transition-transform duration-200 ${showResumeMenu ? 'rotate-180' : ''}`} />
+              </button>
+
+              <AnimatePresence>
+                {showResumeMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-0 mt-2 w-48 rounded-xl border border-[var(--line-strong)] bg-[var(--panel)] p-1 shadow-xl z-50 backdrop-blur-lg"
                   >
-                    <Download size={16} />
-                    Download PDF
-                  </button>
-                  <button
-                    onClick={handlePreviewResume}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-200 hover:bg-white/[0.12] transition-colors"
-                  >
-                    <Eye size={16} />
-                    Preview
-                  </button>
-                </motion.div>
-              )}
+                    <button
+                      type="button"
+                      onClick={handleDownloadResume}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-[var(--text)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-text)] transition-colors text-left"
+                    >
+                      <Download size={14} className="text-[var(--accent)]" />
+                      <span>Download PDF</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePreviewResume}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-[var(--text)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-text)] transition-colors text-left"
+                    >
+                      <Eye size={14} className="text-[var(--accent)]" />
+                      <span>Preview in Drive</span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
 
-          {/* Stats row */}
-          <motion.div
-            className="flex gap-5 justify-center lg:justify-start flex-wrap"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            {stats.map((s, i) => (
+          {/* Stats Row */}
+          <div className="hero-stats flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
+            {stats.map((s) => (
               <div
-                key={i}
-                className="flex items-center gap-2 rounded-lg border border-white/8 bg-white/[0.04] px-4 py-2.5"
+                key={s.label}
+                className="flex items-center gap-2.5 rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3.5 py-2 transition-transform hover:-translate-y-0.5 shadow-sm"
               >
-                <span className="text-[#38bdf8]">{s.icon}</span>
-                <div>
-                  <p className="text-xs text-zinc-500 leading-none mb-0.5">{s.label}</p>
-                  <p className="text-sm font-semibold text-white leading-none">{s.value}</p>
+                <span className="text-[var(--accent)]">{s.icon}</span>
+                <div className="text-left">
+                  <p className="mono text-xs font-medium text-[var(--muted)] leading-tight">{s.label}</p>
+                  <p className="text-sm font-extrabold text-[var(--text)] leading-tight mt-0.5">{s.value}</p>
                 </div>
               </div>
             ))}
-          </motion.div>
+          </div>
         </motion.div>
 
-        {/* ── Right: Photo ── */}
+        {/* ── Right Column: Portrait with orbital ring & badges ── */}
         <motion.div
-          className="lg:w-1/2 flex justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
+          className="hero-portrait w-full lg:w-5/12 flex justify-center items-center"
+          initial={reduced ? false : { opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
         >
           <div className="relative">
-            {/* Glow ring */}
-            <div className="absolute inset-0 rounded-full bg-[#38bdf8]/20 blur-2xl scale-110 pointer-events-none" />
-            {/* Rotating dashed border */}
+            <div className="absolute inset-0 rounded-full bg-[var(--accent)]/20 blur-3xl scale-125 pointer-events-none" />
+
             <motion.div
-              className="absolute inset-[-6px] rounded-full border border-dashed border-[#38bdf8]/30 pointer-events-none"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[-8px] rounded-full border border-dashed border-[var(--accent)]/40 pointer-events-none"
+              animate={reduced ? undefined : { rotate: 360 }}
+              transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
             />
-            {/* Photo circle */}
-            <div className="relative h-64 w-64 overflow-hidden rounded-full border-2 border-white/20 md:h-80 md:w-80">
+
+            <div className="relative h-56 w-56 sm:h-64 sm:w-64 md:h-80 md:w-80 overflow-hidden rounded-full border-2 border-[var(--line-strong)] bg-black/40 shadow-2xl">
               <img
                 src="/pic.jpg"
-                alt="Jiyanshu Jain"
-                className="w-full h-full object-cover"
+                alt="Portrait of Jiyanshu Jain"
+                className="h-full w-full object-cover object-[center_32%] transition-transform duration-500 hover:scale-105"
               />
             </div>
-            {/* Floating badge — Oracle cert */}
+
             <motion.div
-              className="absolute -bottom-2 -right-4 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-md cursor-pointer"
-              initial={{ opacity: 0, y: 10 }}
+              className="hero-badge absolute -top-3 -left-3 sm:-left-6 flex items-center gap-2.5 rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)]/95 px-3.5 py-2.5 backdrop-blur-md shadow-xl cursor-pointer"
+              initial={reduced ? false : { opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              whileHover={{ scale: 1.08, borderColor: 'rgba(249,115,22,0.4)', backgroundColor: 'rgba(249,115,22,0.1)', transition: { duration: 0.15 } }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              whileHover={{ scale: 1.08, y: -4, borderColor: 'var(--accent)', boxShadow: '0 8px 24px var(--accent-soft)' }}
             >
-              <span className="text-base">🏅</span>
-              <div>
-                <p className="text-[10px] text-zinc-400 leading-none mb-0.5">Oracle Certified</p>
-                <p className="text-xs font-semibold text-white leading-none">OCI Data Science</p>
+              <span className="text-lg">💼</span>
+              <div className="text-left">
+                <p className="mono text-xs font-semibold text-[var(--accent-text)] leading-tight">EY · Completed May 2026</p>
+                <p className="text-xs font-bold text-[var(--text)] leading-tight mt-0.5">AI/ML Engineer Intern</p>
               </div>
             </motion.div>
-            {/* Floating badge — EY intern */}
+
             <motion.div
-              className="absolute -top-2 -left-4 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-md cursor-pointer"
-              initial={{ opacity: 0, y: -10 }}
+              className="hero-badge absolute -bottom-3 -right-3 sm:-right-6 flex items-center gap-2.5 rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)]/95 px-3.5 py-2.5 backdrop-blur-md shadow-xl cursor-pointer"
+              initial={reduced ? false : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-              whileHover={{ scale: 1.08, borderColor: 'rgba(56,189,248,0.4)', backgroundColor: 'rgba(56,189,248,0.12)', transition: { duration: 0.15 } }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              whileHover={{ scale: 1.08, y: -4, borderColor: 'var(--accent)', boxShadow: '0 8px 24px var(--accent-soft)' }}
             >
-              <span className="text-base">💼</span>
-              <div>
-                <p className="text-[10px] text-zinc-400 leading-none mb-0.5">Currently</p>
-                <p className="text-xs font-semibold text-white leading-none">AI/ML Engineer @ EY</p>
+              <span className="text-lg">🏅</span>
+              <div className="text-left">
+                <p className="mono text-xs font-semibold text-[var(--muted)] leading-tight">Oracle Certified</p>
+                <p className="text-xs font-bold text-[var(--text)] leading-tight mt-0.5">OCI Data Science</p>
               </div>
             </motion.div>
           </div>
         </motion.div>
       </div>
 
+      {/* Scroll Down Indicator */}
       <motion.button
-        onClick={scrollToAbout}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-zinc-500 transition-colors hover:text-[#00a4ef]"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-        aria-label="Scroll down"
+        type="button"
+        onClick={scrollToExperience}
+        className="focus-ring absolute bottom-3 left-1/2 -translate-x-1/2 p-2 text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
+        animate={reduced ? undefined : { y: [0, 8, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+        aria-label="Scroll down to Experience section"
       >
-        <ChevronDown size={32} />
+        <ChevronDown size={26} />
       </motion.button>
     </section>
   );
-};
-
-export default Hero;
+}

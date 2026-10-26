@@ -11,7 +11,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'animation-vendor': ['framer-motion', 'lenis'],
+          'animation-vendor': ['framer-motion'],
         },
       },
     },

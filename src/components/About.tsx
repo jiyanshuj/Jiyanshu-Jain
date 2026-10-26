@@ -1,121 +1,46 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Briefcase, Award, Rocket, Sparkles } from 'lucide-react';
-import BorderGlow from './BorderGlow';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
-const stats = [
-  {
-    icon: <Briefcase size={22} />,
-    label: 'Currently',
-    value: 'AI/ML Engineer',
-    sub: '@ EY (Ernst & Young)',
-    color: '#00a4ef',
-  },
-  {
-    icon: <Award size={22} />,
-    label: 'Certifications',
-    value: '21 Certs',
-    sub: 'Oracle · Microsoft · IBM · NPTEL',
-    color: '#a78bfa',
-  },
-  {
-    icon: <Rocket size={22} />,
-    label: 'Live Projects',
-    value: '8+ Deployed',
-    sub: 'Running in production',
-    color: '#10b981',
-  },
+const approach = [
+  ['01', 'Start from the data', 'Spatial, structured and unstructured data become models people can use, which means understanding the data before choosing the model.'],
+  ['02', 'Build the system around it', 'Typed APIs, practical services and the data layer are part of the product, not an afterthought.'],
+  ['03', 'Make it legible', 'A focused interface turns technical capability into something the person making the decision can follow.'],
 ];
 
-const About: React.FC = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+const ease = [0.22, 1, 0.36, 1] as const;
 
-  const variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0 },
-  };
-
+export default function About() {
+  const reduced = usePrefersReducedMotion();
   return (
-    <section id="about" ref={ref} className="relative overflow-hidden bg-transparent py-24">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_55%_at_50%_-15%,rgba(50,59,130,0.32),transparent_72%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:42px_42px] opacity-35" />
-      </div>
-
-      <div className="container relative z-10 mx-auto px-4 md:px-6">
-
-        {/* Header */}
-        <motion.div
-          variants={variants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <div className="cert-kicker mx-auto mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
-            <Sparkles size={14} />
-            Quick Intro
-          </div>
-          <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
-            About Me
-          </h2>
-          <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
-          <p className="mx-auto max-w-2xl text-lg text-zinc-400">
-            Frontend, backend, ML — I build all three because real products need all three.
-          </p>
-        </motion.div>
-
-        {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {stats.map((s, index) => (
+    <section id="about" className="section" aria-labelledby="about-heading">
+      <div className="page-width grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <div>
+          <span className="section-label">Approach</span>
+          <h2 id="about-heading" className="h2">My engineering approach</h2>
+          <p className="mt-6 text-xl font-medium leading-8 tracking-tight">I'm an AI/ML engineer from Indore focused on the path from data to a working product.</p>
+          <p className="mt-4 text-sm leading-7 text-[var(--muted-strong)]">My work combines model development, APIs and interfaces, so the result is useful to the person on the other end rather than only accurate on a notebook.</p>
+        </div>
+        <dl className="border-t border-[var(--line-strong)] lg:mt-14">
+          {approach.map(([num, term, text], i) => (
             <motion.div
-              key={index}
-              variants={variants}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-              transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
+              key={term}
+              initial={reduced ? false : { opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, delay: i * 0.1, ease }}
+              className="border-b border-[var(--line)] py-5"
             >
-              <BorderGlow
-                backgroundColor="rgba(15, 13, 23, 0.8)"
-                glowColor="200 100 70"
-                borderRadius={16}
-                glowRadius={35}
-                glowIntensity={0.8}
-                edgeSensitivity={25}
-                coneSpread={28}
-                colors={['#a78bfa', '#10b981', '00a4ef']}
-                className="h-full"
-              >
-                <div className="p-7 transition-all duration-300">
-                  {/* Icon */}
-                  <div
-                    className="mb-5 inline-flex rounded-xl border border-white/10 bg-white/[0.06] p-3"
-                    style={{ color: s.color }}
-                  >
-                    {s.icon}
-                  </div>
-
-                  {/* Label */}
-                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-zinc-500 mb-1">
-                    {s.label}
-                  </p>
-
-                  {/* Value */}
-                  <p className="text-xl font-bold text-zinc-100 mb-1" style={{ color: s.color }}>
-                    {s.value}
-                  </p>
-
-                  {/* Sub */}
-                  <p className="text-sm text-zinc-400">{s.sub}</p>
+              <div className="flex items-start gap-4">
+                <span className="mono text-[2rem] font-extrabold leading-none text-[var(--accent)] opacity-30 select-none">{num}</span>
+                <div>
+                  <dt className="font-semibold">{term}</dt>
+                  <dd className="mt-1 text-sm leading-6 text-[var(--muted-strong)]">{text}</dd>
                 </div>
-              </BorderGlow>
+              </div>
             </motion.div>
           ))}
-        </div>
+        </dl>
       </div>
     </section>
   );
-};
-
-export default About;
+}

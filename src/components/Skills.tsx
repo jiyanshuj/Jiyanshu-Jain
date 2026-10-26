@@ -1,256 +1,560 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import {
-  Sparkles,
-  Code2,
-  LayoutTemplate,
-  Server,
-  Brain,
-  Cloud,
-  Wrench,
-  ChevronDown,
-} from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useMemo } from 'react';
+import { Terminal, ArrowUpRight, Search, Activity } from 'lucide-react';
+import { projects } from '../data/portfolio';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
-type Skill = {
+type Stage = { id: string; title: string; short: string; notes: string; details: string; tools: string[] };
+
+const stages: Stage[] = [
+  {
+    id: 'ingestion',
+    title: 'Data Ingestion & Extraction',
+    short: 'Ingest',
+    notes: 'Candidate locations, infrastructure context and demand signals are organised into an analysis-ready spatial dataset.',
+    details: 'PostGIS spatial queries combine point-of-interest density, arterial road proximity, and electrical substation connectivity into canonical geo-data structures.',
+    tools: ['Python', 'Pandas', 'GeoPandas', 'PostGIS'],
+  },
+  {
+    id: 'features',
+    title: 'Spatial Feature Engineering',
+    short: 'Features',
+    notes: 'Proximity matrices, point-of-interest density, road networks, and grid capacity become model-ready numerical vectors.',
+    details: 'Spatial transformations and buffer calculations are verified against QGIS layers before training to ensure strict geographic validity.',
+    tools: ['GeoPandas', 'Shapely', 'Pandas', 'QGIS'],
+  },
+  {
+    id: 'ranking',
+    title: 'Prioritisation & XGBoost Scoring',
+    short: 'Rank',
+    notes: 'XGBoost regression models combined with Analytic Hierarchy Process (AHP) weighting yield an explainable priority index.',
+    details: 'SHAP summary plots validate that distance penalties and demand bonuses align with real-world infrastructure investment constraints.',
+    tools: ['XGBoost', 'scikit-learn', 'AHP', 'SHAP'],
+  },
+  {
+    id: 'service',
+    title: 'Microservice API & Orchestration',
+    short: 'Serve',
+    notes: 'Ranked candidate sites and geospatial attributes are served via containerized FastAPI microservices.',
+    details: 'Async endpoints return geojson payloads with Pydantic schema validation for consumption by client dashboards.',
+    tools: ['FastAPI', 'Flask', 'Pydantic', 'REST APIs'],
+  },
+  {
+    id: 'product',
+    title: 'Map-Led Decision Interface',
+    short: 'Interface',
+    notes: 'Map-centric interactive views allow infrastructure stakeholders to explore constraints and candidate ranking metrics.',
+    details: 'Interactive Folium/React mapping controls render choropleth overlays, site buffers, and scoring justifications side-by-side.',
+    tools: ['React', 'Folium', 'QGIS', 'Tailwind CSS'],
+  },
+];
+
+type SkillMetadata = {
   name: string;
-  icon?: string;
-  category: 'languages' | 'frontend' | 'backend' | 'ml-data' | 'cloud-db' | 'mobile' | 'tools';
+  category: 'AI / ML' | 'Data / Geospatial' | 'Backend / APIs' | 'Frontend / Mobile' | 'Databases / Tools' | 'Languages';
+  role: string;
+  context: string;
 };
 
-const Skills: React.FC = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+const allSkills: SkillMetadata[] = [
+  // Languages
+  { name: 'Python', category: 'Languages', role: 'Primary Production Core', context: 'Geospatial ML, async microservices, data transformations & model training' },
+  { name: 'TypeScript', category: 'Languages', role: 'Type-Safe Architecture', context: 'Typed frontends, robust application contracts & modern web tools' },
+  { name: 'JavaScript', category: 'Languages', role: 'Web Runtimes', context: 'ESNext features, dynamic DOM interaction & full-stack integrations' },
+  { name: 'SQL', category: 'Languages', role: 'Relational & Analytical', context: 'Complex spatial aggregations, window functions & relational modeling' },
+  { name: 'C++', category: 'Languages', role: 'High-Performance Computing', context: 'Data structures, algorithms and OOP coursework' },
 
-  // tracks which category cards have their "long tail" expanded
-  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+  // AI / ML
+  { name: 'XGBoost', category: 'AI / ML', role: 'Gradient Boosted Trees', context: 'Geospatial site suitability scoring & multi-criteria feature ensembles' },
+  { name: 'scikit-learn', category: 'AI / ML', role: 'Ensemble Learning', context: 'Multi-target classification pipelines, cross-validation & feature scaling' },
+  { name: 'Gemini API', category: 'AI / ML', role: 'Multimodal LLM Core', context: 'Contextual resume parsing, structured presentation outlining & AI reasoning' },
+  { name: 'OpenCV', category: 'AI / ML', role: 'Computer Vision', context: 'Real-time facial verification, frame preprocessing & spatial edge detection' },
+  { name: 'TensorFlow', category: 'AI / ML', role: 'Deep Learning', context: 'Coursework and certification-level familiarity' },
+  { name: 'SHAP', category: 'AI / ML', role: 'Model Interpretability', context: 'Explainable AI attribution, tree importance plots & feature contribution auditing' },
 
-  const toggleExpanded = (index: number) => {
-    setExpanded((prev) => ({ ...prev, [index]: !prev[index] }));
+  // Data / Geospatial
+  { name: 'GeoPandas', category: 'Data / Geospatial', role: 'Vector Spatial Analytics', context: 'Shapefile transformations, coordinate reference systems & buffer logic' },
+  { name: 'Pandas', category: 'Data / Geospatial', role: 'DataFrame Engineering', context: 'High-volume tabular cleansing, vector aggregation & data prep' },
+  { name: 'NumPy', category: 'Data / Geospatial', role: 'Vectorized Math', context: 'N-dimensional matrix operations, linear algebra & numeric computation' },
+  { name: 'QGIS', category: 'Data / Geospatial', role: 'Geographic Information Systems', context: 'Cartographic validation, spatial layer composition & geospatial audits' },
+  { name: 'Folium', category: 'Data / Geospatial', role: 'Interactive Mapping', context: 'Leaflet geospatial heatmaps, choropleths & candidate site visualization' },
+  { name: 'Azure Databricks', category: 'Data / Geospatial', role: 'Cloud Analytics Lakehouse', context: 'Scalable data pipeline execution & distributed spatial workflows' },
+
+  // Backend / APIs
+  { name: 'FastAPI', category: 'Backend / APIs', role: 'Async REST Microservices', context: 'High-concurrency async endpoints, OpenAPI docs & Pydantic validation' },
+  { name: 'Flask', category: 'Backend / APIs', role: 'Modular Python Services', context: 'Lightweight routing, internal utility microservices & model hosting' },
+  { name: 'Django', category: 'Backend / APIs', role: 'Full-Featured Web Architecture', context: 'Familiar through coursework; most projects use FastAPI or Flask' },
+  { name: 'Pydantic', category: 'Backend / APIs', role: 'Schema & Type Validation', context: 'Strict JSON payload serialization, environment configs & data contracts' },
+  { name: 'Redis', category: 'Backend / APIs', role: 'In-Memory Cache & Queues', context: 'Session caching, latency reduction & fast key-value lookups' },
+  { name: 'REST APIs', category: 'Backend / APIs', role: 'Service Interface Design', context: 'Stateless HTTP protocol design, rate-limiting & endpoint ergonomics' },
+
+  // Frontend / Mobile
+  { name: 'React', category: 'Frontend / Mobile', role: 'Component Systems', context: 'State-driven SPAs, reactive dashboards & client-side telemetry' },
+  { name: 'React Native', category: 'Frontend / Mobile', role: 'Cross-Platform Mobile', context: 'Native iOS/Android candidate portals, gesture handling & mobile views' },
+  { name: 'Tailwind CSS', category: 'Frontend / Mobile', role: 'Modern Design Systems', context: 'Utility-first tokens, dark mode orchestration & bespoke styling' },
+  { name: 'Framer Motion', category: 'Frontend / Mobile', role: 'Physics Animation', context: 'Hardware-calibrated spring physics, gesture tracking & layout transitions' },
+  { name: 'Vite', category: 'Frontend / Mobile', role: 'Next-Gen Build Engine', context: 'Instant hot module replacement, ESM bundling & production asset builds' },
+  { name: 'Expo', category: 'Frontend / Mobile', role: 'Mobile Tooling Workflow', context: 'Managed native runtimes, fast client iteration & mobile deployment' },
+
+  // Databases / Tools
+  { name: 'PostGIS', category: 'Databases / Tools', role: 'Spatial Database Extension', context: 'Geographic indexing (R-Tree), spatial joins & geographic distance queries' },
+  { name: 'PostgreSQL', category: 'Databases / Tools', role: 'ACID Relational Core', context: 'Relational data integrity, indexing strategies & transactional storage' },
+  { name: 'MongoDB', category: 'Databases / Tools', role: 'Document Store', context: 'Unstructured JSON document storage, candidate profile indexing & caching' },
+  { name: 'Supabase', category: 'Databases / Tools', role: 'Postgres Cloud BaaS', context: 'Row-level security policies, authentication & real-time database listeners' },
+  { name: 'Docker', category: 'Databases / Tools', role: 'Container Orchestration', context: 'Reproducible microservice builds, isolation & deployment containers' },
+  { name: 'Git', category: 'Databases / Tools', role: 'Version Control', context: 'Branching strategies, CI/CD integration & collaborative code management' },
+];
+
+const categoryList = ['All Stack', 'AI / ML', 'Data / Geospatial', 'Backend / APIs', 'Frontend / Mobile', 'Databases / Tools', 'Languages'] as const;
+type CategoryTab = typeof categoryList[number];
+
+type SkillsProps = { selectedSkill: string | null; onSelectSkill: (skill: string) => void; onClearSkill: () => void };
+
+const flagshipSkillNames = ['Python', 'FastAPI', 'XGBoost', 'GeoPandas', 'PostGIS', 'scikit-learn', 'React', 'Docker'];
+
+export default function Skills({ selectedSkill, onSelectSkill, onClearSkill }: SkillsProps) {
+  const [index, setIndex] = useState(0);
+  const [categoryFilter, setCategoryFilter] = useState<CategoryTab>('All Stack');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showAllSkills, setShowAllSkills] = useState(false);
+  const activeStage = stages[index];
+  const reduced = usePrefersReducedMotion();
+
+  // Find currently active skill metadata (defaults to first or selected)
+  const activeSkillMeta = useMemo(() => {
+    if (selectedSkill) {
+      return allSkills.find((s) => s.name === selectedSkill) ?? allSkills[0];
+    }
+    return allSkills[0];
+  }, [selectedSkill]);
+
+  // Projects that use the currently active skill
+  const matchingProjects = useMemo(() => {
+    return projects.filter((p) => p.technologies.includes(activeSkillMeta.name));
+  }, [activeSkillMeta]);
+
+  // Filtered skills list with recruiter-friendly core collapse
+  const filteredSkills = useMemo(() => {
+    const list = allSkills.filter((s) => {
+      const matchesCat = categoryFilter === 'All Stack' || s.category === categoryFilter;
+      const matchesSearch =
+        searchQuery.trim() === '' ||
+        s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.context.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCat && matchesSearch;
+    });
+
+    // If on All Stack without active search and collapsed, only display the 8 flagship core skills
+    if (categoryFilter === 'All Stack' && !searchQuery.trim() && !showAllSkills) {
+      return list.filter((s) => flagshipSkillNames.includes(s.name));
+    }
+
+    return list;
+  }, [categoryFilter, searchQuery, showAllSkills]);
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      setIndex((i) => Math.min(i + 1, stages.length - 1));
+    }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setIndex((i) => Math.max(i - 1, 0));
+    }
   };
 
-  const skills: Skill[] = [
-    { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', category: 'languages' },
-    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', category: 'languages' },
-    { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', category: 'languages' },
-    { name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', category: 'languages' },
-    { name: 'SQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg', category: 'languages' },
-    { name: 'HTML/CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', category: 'languages' },
-    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', category: 'frontend' },
-    { name: 'React Native', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', category: 'frontend' },
-    { name: 'Vite', icon: 'https://vitejs.dev/logo.svg', category: 'frontend' },
-    { name: 'Tailwind CSS', icon: 'https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg', category: 'frontend' },
-    { name: 'Framer Motion', category: 'frontend' },
-    { name: 'Lucide React', category: 'frontend' },
-    { name: 'Expo', category: 'mobile' },
-    { name: 'FastAPI', icon: 'https://cdn.worldvectorlogo.com/logos/fastapi.svg', category: 'backend' },
-    { name: 'Flask', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg', category: 'backend' },
-    { name: 'Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', category: 'backend' },
-    { name: 'REST APIs', category: 'backend' },
-    { name: 'Uvicorn', category: 'backend' },
-    { name: 'Gemini API', category: 'ml-data' },
-    { name: 'Langflow AI', category: 'ml-data' },
-    { name: 'OpenCV', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg', category: 'ml-data' },
-    { name: 'scikit-learn', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg', category: 'ml-data' },
-    { name: 'XGBoost', category: 'ml-data' },
-    { name: 'TensorFlow', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', category: 'ml-data' },
-    { name: 'GeoPandas', category: 'ml-data' },
-    { name: 'Pandas', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg', category: 'ml-data' },
-    { name: 'NumPy', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg', category: 'ml-data' },
-    { name: 'Pydantic', category: 'ml-data' },
-    { name: 'Streamlit', category: 'ml-data' },
-    { name: 'AHP', category: 'ml-data' },
-    { name: 'SHAP', category: 'ml-data' },
-    { name: 'Folium', category: 'ml-data' },
-    { name: 'Shapely', category: 'ml-data' },
-    { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', category: 'cloud-db' },
-    { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', category: 'cloud-db' },
-    { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', category: 'cloud-db' },
-    { name: 'SQLite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg', category: 'cloud-db' },
-    { name: 'Supabase', category: 'cloud-db' },
-    { name: 'Firebase', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg', category: 'cloud-db' },
-    { name: 'Cloudinary', category: 'cloud-db' },
-    { name: 'PostGIS', category: 'cloud-db' },
-    { name: 'Clerk', category: 'cloud-db' },
-    { name: 'Azure Databricks', category: 'cloud-db' },
-    { name: 'QGIS', category: 'cloud-db' },
-    { name: 'Vercel', icon: 'https://www.vectorlogo.zone/logos/vercel/vercel-icon.svg', category: 'cloud-db' },
-    { name: 'Netlify', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/netlify/netlify-original.svg', category: 'cloud-db' },
-    { name: 'Render', category: 'cloud-db' },
-    { name: 'Google OAuth', category: 'cloud-db' },
-    { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', category: 'tools' },
-    { name: 'GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', category: 'tools' },
-    { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', category: 'tools' },
-    { name: 'Postman', category: 'tools' },
-    { name: 'Jupyter', category: 'tools' },
-    { name: 'VS Code', category: 'tools' },
-    { name: 'Linux', category: 'tools' },
-    { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', category: 'tools' },
-    { name: 'ESLint', category: 'tools' },
-    { name: 'Prettier', category: 'tools' },
-    { name: 'ngrok', category: 'tools' },
-    { name: 'Python-docx', category: 'tools' },
-    { name: 'Python-pptx', category: 'tools' },
-    { name: 'PyPDF2', category: 'tools' },
-    { name: 'Pillow', category: 'tools' },
-    { name: 'TomTom API', category: 'tools' },
-    { name: 'Google Custom Search API', category: 'tools' },
-  ];
-
-  const groupedSkills = [
-    {
-      title: 'Languages',
-      icon: Code2,
-      items: ['Python', 'TypeScript', 'JavaScript', 'C++', 'SQL', 'HTML/CSS'],
-    },
-    {
-      title: 'Frontend',
-      icon: LayoutTemplate,
-      items: ['React', 'React Native', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Lucide React', 'Expo'],
-    },
-    {
-      title: 'Backend',
-      icon: Server,
-      items: ['FastAPI', 'Flask', 'Django', 'REST APIs', 'Uvicorn'],
-    },
-    {
-      title: 'ML / Data',
-      icon: Brain,
-      items: ['Gemini API', 'Langflow AI', 'OpenCV', 'scikit-learn', 'XGBoost', 'TensorFlow', 'GeoPandas', 'Pandas', 'NumPy', 'Pydantic', 'Streamlit', 'AHP', 'SHAP', 'Folium', 'Shapely'],
-    },
-    {
-      title: 'Cloud / Data',
-      icon: Cloud,
-      items: ['PostgreSQL', 'MongoDB', 'Redis', 'SQLite', 'Supabase', 'Firebase', 'Cloudinary', 'PostGIS', 'Clerk', 'Azure Databricks', 'QGIS', 'Vercel', 'Netlify', 'Render', 'Google OAuth'],
-    },
-    {
-      title: 'Tools',
-      icon: Wrench,
-      items: ['Git', 'GitHub', 'Docker', 'Postman', 'Jupyter', 'VS Code', 'Linux', 'Figma', 'ESLint', 'Prettier', 'ngrok', 'Python-docx', 'Python-pptx', 'PyPDF2', 'Pillow', 'TomTom API', 'Google Custom Search API'],
-    },
-  ];
-
-  const SECONDARY_PREVIEW_COUNT = 4;
-
   return (
-    <section id="skills" ref={ref} className="relative overflow-hidden bg-transparent py-24">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_72%_55%_at_50%_-15%,rgba(50,59,130,0.32),transparent_72%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:42px_42px] opacity-35" />
-      </div>
-
-      <div className="container relative z-10 mx-auto px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <div className="cert-kicker mx-auto mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
-            <Sparkles size={14} />
-            Core Capabilities
+    <>
+      {/* SECTION 03: TECHNICAL DEEP DIVES (The Isometric 3D Stack - Preserved) */}
+      <section id="engineering" className="section" aria-labelledby="engineering-heading">
+        <div className="page-width">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="section-label">Architecture</span>
+              <h2 id="engineering-heading" className="h2">Technical deep dives</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="mono text-xs text-[var(--muted)]">
+                EV Site Suitability Architecture
+              </span>
+            </div>
           </div>
-          <h2 className="cert-title mb-4 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">My Skills</h2>
-          <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
-          <p className="mx-auto max-w-3xl text-lg text-zinc-400">
-            Every skill here has a project behind it
-          </p>
-        </motion.div>
 
-        {/* Category breakdown — recognizable tech leads as icon chips, the long tail collapses */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {groupedSkills.map((category, index) => {
-            const CategoryIcon = category.icon;
-
-            const itemsWithData = category.items.map((name) => ({
-              name,
-              icon: skills.find((s) => s.name === name)?.icon,
-            }));
-
-            // Recognizable-logo skills surface first; unlabeled ones become quieter secondary pills
-            const primaryItems = itemsWithData.filter((item) => item.icon);
-            const secondaryItems = itemsWithData.filter((item) => !item.icon);
-
-            const isExpanded = expanded[index];
-            const visibleSecondary = isExpanded
-              ? secondaryItems
-              : secondaryItems.slice(0, SECONDARY_PREVIEW_COUNT);
-            const hiddenCount = secondaryItems.length - visibleSecondary.length;
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="cert-card rounded-xl p-6 transition-colors hover:border-white/20"
+          <div
+            className="mt-8 grid items-center gap-8 border border-[var(--text)] bg-[var(--panel)] p-5 md:grid-cols-2 md:p-8 shadow-[var(--shadow)]"
+          >
+            {/* Isometric 3D Stack - Calibrated to display all 5 layers with zero clipping */}
+            <div
+              className="scene-3d relative mx-auto h-[28rem] w-full max-w-md"
+              role="tablist"
+              aria-label="Pipeline layers"
+              aria-orientation="vertical"
+              onKeyDown={onKey}
+            >
+              <div
+                className="preserve-3d absolute left-1/2 top-[66%] h-0 w-0 scale-[0.82] sm:scale-[0.9] lg:scale-[0.95]"
+                style={{ transform: 'rotateX(58deg) rotateZ(-38deg)' }}
               >
-                <div className="mb-5 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <CategoryIcon size={18} className="text-cyan-400" />
-                    <h3 className="text-lg font-bold text-cyan-400">{category.title}</h3>
-                  </div>
-                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-zinc-500">
-                    {category.items.length}
-                  </span>
-                </div>
+                {/* Dashed baseline frame */}
+                <div
+                  className="absolute border border-dashed border-[var(--line-strong)]"
+                  style={{ width: 230, height: 140, left: -115, top: -70, transform: 'translateZ(-18px)' }}
+                  aria-hidden="true"
+                />
 
-                {/* Primary: recognizable logos, scannable at a glance */}
-                {primaryItems.length > 0 && (
-                  <div className="mb-4 grid grid-cols-2 gap-2">
-                    {primaryItems.map((item) => (
-                      <div
-                        key={item.name}
-                        className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.08] px-2.5 py-2"
-                      >
-                        <img src={item.icon} alt={item.name} className="h-5 w-5 shrink-0 object-contain" />
-                        <span className="truncate text-sm font-medium text-zinc-200">{item.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {stages.map((stage, i) => {
+                  const selected = i === index;
+                  return (
+                    <button
+                      key={stage.id}
+                      type="button"
+                      role="tab"
+                      id={`layer-${stage.id}`}
+                      aria-selected={selected}
+                      aria-controls="layer-detail"
+                      tabIndex={selected ? 0 : -1}
+                      onClick={() => setIndex(i)}
+                      aria-label={`${stage.title}, layer ${i + 1} of ${stages.length}`}
+                      className={`focus-ring absolute flex flex-col items-center justify-center border text-center text-xs font-bold transition-all duration-200 ${
+                        selected
+                          ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-ink)] shadow-[0_0_24px_var(--accent-glow)]'
+                          : 'border-[var(--text)] bg-[var(--panel)] text-[var(--text)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)]'
+                      }`}
+                      style={{
+                        width: 200,
+                        height: 110,
+                        left: -100,
+                        top: -55,
+                        transform: `translateZ(${i * 54 + (selected ? 18 : 0)}px)`,
+                      }}
+                    >
+                      <span className="mono text-xs uppercase tracking-wider opacity-80">
+                        Stage {i + 1}
+                      </span>
+                      <span className="mt-0.5 text-sm font-extrabold">{stage.short}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-                {/* Secondary: everything else, quieter and collapsible */}
-                {secondaryItems.length > 0 && (
-                  <>
-                    {primaryItems.length > 0 && (
-                      <div className="mb-3 h-px w-full bg-white/10" />
-                    )}
-                    <div className="flex flex-wrap gap-2">
-                      {visibleSecondary.map((item) => (
-                        <span
-                          key={item.name}
-                          className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-zinc-400"
-                        >
-                          {item.name}
+            {/* Stage Detail Panel */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeStage.id}
+                id="layer-detail"
+                role="tabpanel"
+                aria-labelledby={`layer-${activeStage.id}`}
+                initial={reduced ? false : { opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={reduced ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                className="flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between border-b border-[var(--line)] pb-2">
+                    <span className="mono text-xs font-bold text-[var(--accent-text)]">
+                      Layer {index + 1} of {stages.length}
+                    </span>
+                    <span className="mono text-xs text-[var(--muted)]">Explainable ML Pipeline</span>
+                  </div>
+
+                  <h3 className="mt-3 text-2xl font-bold tracking-tight text-[var(--text)] sm:text-3xl">
+                    {activeStage.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--muted-strong)]">{activeStage.notes}</p>
+
+                  <div className="mt-4 border-l-2 border-[var(--accent)] bg-[var(--bg)] p-3">
+                    <span className="mono text-xs font-bold uppercase tracking-wider text-[var(--accent-text)]">
+                      Architecture Note
+                    </span>
+                    <p className="mt-1 text-xs leading-relaxed text-[var(--muted-strong)]">{activeStage.details}</p>
+                  </div>
+
+                  <div className="mt-5">
+                    <span className="mono text-xs text-[var(--muted)] block mb-1.5 font-semibold">Technologies</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {activeStage.tools.map((t) => (
+                        <span className="tag text-xs" key={t}>
+                          {t}
                         </span>
                       ))}
                     </div>
+                  </div>
+                </div>
 
-                    {hiddenCount > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => toggleExpanded(index)}
-                        className="mt-3 flex items-center gap-1 text-xs font-medium text-cyan-400/80 transition-colors hover:text-cyan-300"
-                      >
-                        {isExpanded ? 'Show less' : `+${hiddenCount} more`}
-                        <ChevronDown
-                          size={14}
-                          className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                        />
-                      </button>
-                    )}
-                  </>
-                )}
+                {/* Progress Indicators */}
+                <div className="mt-6 flex gap-1.5" aria-hidden="true">
+                  {stages.map((s, i) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => setIndex(i)}
+                      tabIndex={-1}
+                      className={`focus-ring h-1.5 flex-1 transition-colors ${
+                        i <= index ? 'bg-[var(--accent)]' : 'bg-[var(--line-strong)]'
+                      }`}
+                      aria-label={`Jump to stage ${i + 1}`}
+                    />
+                  ))}
+                </div>
               </motion.div>
-            );
-          })}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
-    </section>
-  );
-};
+      </section>
 
-export default Skills;
+      {/* SECTION 04: REDESIGNED TECHNICAL SKILLS */}
+      <section id="skills" className="section" aria-labelledby="skills-heading">
+        <div className="page-width">
+          {/* Header */}
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="section-label">Skills</span>
+              <h2 id="skills-heading" className="h2">Technical skills</h2>
+              <p className="mt-1.5 mono text-xs sm:text-sm font-semibold text-[var(--accent-text)]">
+                Every skill here has a project behind it
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="mono flex items-center gap-1.5 border border-[var(--line-strong)] bg-[var(--panel)] px-2.5 py-1 text-xs text-[var(--muted-strong)]">
+                <Activity size={12} className="animate-pulse text-[var(--accent)]" />
+                Technical Stack ({allSkills.length} Technologies)
+              </span>
+            </div>
+          </div>
+
+          {/* Controls Bar: Domain Tabs + Quick Search Filter */}
+          <div className="mt-8 flex flex-col gap-3 border-y border-[var(--line-strong)] py-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-1.5" role="tablist">
+              {categoryList.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  role="tab"
+                  aria-selected={categoryFilter === cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={`focus-ring mono px-2.5 py-1 text-xs font-semibold uppercase transition-all duration-150 ${
+                    categoryFilter === cat
+                      ? 'border border-[var(--text)] bg-[var(--text)] text-[var(--bg)] shadow-[0_0_8px_var(--accent-glow)]'
+                      : 'border border-[var(--line)] text-[var(--muted-strong)] hover:border-[var(--text)] hover:text-[var(--text)]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative block sm:w-64">
+              <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+              <input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Query tool or domain..."
+                className="focus-ring mono h-9 w-full border border-[var(--line-strong)] bg-[var(--panel)] pl-8 pr-3 text-xs placeholder:text-[var(--muted)]"
+              />
+            </div>
+          </div>
+
+          {/* Two-Column Hardware Matrix: Left is Tactile Chips, Right is Live Diagnostic Terminal HUD */}
+          <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-8">
+            {/* Left: Tactile Silicon Chip Matrix Grid */}
+            <div className="lg:col-span-7">
+              <div className="grid gap-3 sm:grid-cols-2 sm:gap-3.5">
+                {filteredSkills.map((skill, i) => {
+                  const isSelected = selectedSkill === skill.name || (!selectedSkill && activeSkillMeta.name === skill.name);
+                  const linkedCount = projects.filter((p) => p.technologies.includes(skill.name)).length;
+
+                  return (
+                    <button
+                      key={skill.name}
+                      type="button"
+                      onClick={() => onSelectSkill(skill.name)}
+                      className={`focus-ring group relative flex flex-col justify-between border p-3.5 text-left transition-all duration-150 ${
+                        isSelected
+                          ? 'border-[var(--accent)] bg-[var(--panel)] shadow-[0_0_14px_var(--accent-glow)] translate-x-1'
+                          : 'border-[var(--line)] bg-[var(--panel)] hover:border-[var(--accent)]'
+                      }`}
+                    >
+                      {/* Top Pin Header */}
+                      <div className="flex items-center justify-between border-b border-[var(--line)] pb-2">
+                        <div className="flex items-center gap-1.5">
+                          <span
+                            className={`h-1.5 w-1.5 ${
+                              isSelected ? 'bg-[var(--accent)] shadow-[0_0_6px_var(--accent)]' : 'bg-[var(--muted)]'
+                            }`}
+                          />
+                          <span className="mono text-xs text-[var(--muted)]">
+                            Skill {i + 1}
+                          </span>
+                        </div>
+                        <span className="mono text-xs font-bold text-[var(--accent-text)]">
+                          {skill.category.split(' ')[0]}
+                        </span>
+                      </div>
+
+                      {/* Tool Name & Role */}
+                      <div className="my-2.5">
+                        <div className="mono text-sm font-bold text-[var(--text)] group-hover:text-[var(--accent-text)]">
+                          {skill.name}
+                        </div>
+                        <p className="mono mt-0.5 text-xs text-[var(--muted-strong)] truncate">
+                          {skill.role}
+                        </p>
+                      </div>
+
+                      {/* Bottom Footer Info */}
+                      <div className="flex items-center justify-between border-t border-[var(--line)] pt-1.5">
+                        <span className="mono text-xs text-[var(--muted)]">
+                          {linkedCount > 0 ? `${linkedCount} project${linkedCount === 1 ? '' : 's'}` : 'Core skill'}
+                        </span>
+                        <span className="mono text-xs font-semibold text-[var(--text)] group-hover:text-[var(--accent-text)]">
+                          View →
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Recruiter / Senior Manager Compact View Toggle */}
+              {categoryFilter === 'All Stack' && !searchQuery.trim() && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllSkills(!showAllSkills)}
+                  className="focus-ring mono mt-4 flex w-full items-center justify-center gap-2 border border-[var(--line-strong)] bg-[var(--panel)] py-2.5 text-xs font-bold text-[var(--text)] transition-all hover:border-[var(--accent)] hover:text-[var(--accent-text)]"
+                >
+                  {showAllSkills ? (
+                    <span>Collapse to core stack (8 tools)</span>
+                  ) : (
+                    <>
+                      <span>View all {allSkills.length} technologies</span>
+                    </>
+                  )}
+                </button>
+              )}
+
+              {filteredSkills.length === 0 && (
+                <div className="border border-dashed border-[var(--line-strong)] p-8 text-center">
+                  <p className="mono text-xs text-[var(--muted)]">No utilities match your search.</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCategoryFilter('All Stack');
+                      setSearchQuery('');
+                      onClearSkill();
+                    }}
+                    className="focus-ring mono mt-3 text-xs font-bold text-[var(--accent-text)] underline"
+                  >
+                    Reset filter
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Right: Live Diagnostic Terminal HUD Station (Fixed to Top on Scroll) */}
+            <div className="lg:col-span-5">
+              <div className="border border-[var(--text)] bg-[var(--panel)] p-5 lg:sticky lg:top-8 shadow-[var(--shadow)]">
+                {/* Terminal Window Header */}
+                <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
+                  <div className="flex items-center gap-2">
+                    <Terminal size={14} className="text-[var(--accent-text)]" />
+                    <span className="mono text-xs font-bold uppercase tracking-wider text-[var(--text)]">
+                      Skill Details
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-red-500/60" />
+                    <span className="h-2 w-2 rounded-full bg-yellow-500/60" />
+                    <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
+                  </div>
+                </div>
+
+                {/* Telemetry Readout Body */}
+                <div className="mt-4 space-y-4">
+                  {/* Module Title & Category */}
+                  <div>
+                    <span className="mono text-xs text-[var(--muted)] uppercase tracking-wider">
+                      Selected Technology
+                    </span>
+                    <h3 className="mono mt-1 text-xl font-bold text-[var(--text)]">
+                      {activeSkillMeta.name}
+                    </h3>
+                    <p className="mono text-xs font-semibold text-[var(--accent-text)]">
+                      {activeSkillMeta.category} · {activeSkillMeta.role}
+                    </p>
+                  </div>
+
+                  {/* Production Context */}
+                  <div className="border border-[var(--line)] bg-[var(--bg)] p-3.5">
+                    <span className="mono text-xs font-bold uppercase tracking-wider text-[var(--accent-text)]">
+                      {matchingProjects.length > 0 ? 'How I use it' : 'Working knowledge'}
+                    </span>
+                    <p className="mt-1.5 text-xs leading-relaxed text-[var(--muted-strong)]">
+                      {activeSkillMeta.context}
+                    </p>
+                  </div>
+
+                  {/* Cross-Referenced Projects */}
+                  <div>
+                    <div className="flex items-center justify-between border-b border-[var(--line)] pb-1.5">
+                      <span className="mono text-xs font-bold text-[var(--muted)] uppercase">
+                        Used in projects ({matchingProjects.length})
+                      </span>
+                    </div>
+
+                    {matchingProjects.length > 0 ? (
+                      <div className="mt-2.5 space-y-2">
+                        {matchingProjects.map((p) => (
+                          <a
+                            key={p.id}
+                            href="#projects"
+                            className="group flex items-center justify-between border border-[var(--line)] bg-[var(--bg)] p-2.5 text-xs transition-colors hover:border-[var(--accent)]"
+                          >
+                            <div>
+                              <span className="mono font-bold text-[var(--text)] group-hover:text-[var(--accent-text)]">
+                                {p.title}
+                              </span>
+                              <span className="mono block text-xs text-[var(--muted)]">
+                                {p.category}
+                              </span>
+                            </div>
+                            <ArrowUpRight size={13} className="text-[var(--muted)] group-hover:text-[var(--accent-text)]" />
+                          </a>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="mt-2 mono text-xs text-[var(--muted)]">
+                        Learned through coursework and certifications; not shown in a listed project.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Terminal Execution Footer */}
+                  <div className="border-t border-[var(--line)] pt-3">
+                    <div className="flex items-center justify-between">
+                      <span className="mono text-xs text-[var(--muted)]">
+                        {matchingProjects.length > 0 ? 'Used in projects' : 'Working knowledge'}
+                      </span>
+                      {selectedSkill && (
+                        <button
+                          type="button"
+                          onClick={onClearSkill}
+                          className="mono text-xs font-bold text-[var(--accent-text)] underline hover:text-[var(--text)]"
+                        >
+                          Clear selection
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

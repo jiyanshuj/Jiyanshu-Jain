@@ -6,7 +6,7 @@ function useTypingEffect(words: string[], typingSpeed = 150, deletingSpeed = 100
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    let typingTimeout: NodeJS.Timeout;
+    let typingTimeout: ReturnType<typeof setTimeout>;
 
     const currentWord = words[wordIndex % words.length];
 
