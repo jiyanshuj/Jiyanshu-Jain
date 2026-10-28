@@ -5,6 +5,31 @@ import useTypingEffect from '../hooks/useTypingEffect';
 import { contact } from '../data/portfolio';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
+const SparklesIcon = ({ size = 18, className = '' }: { size?: number; className?: string }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M10 4C10 8 7 11 3 12C7 13 10 16 10 20C10 16 13 13 17 12C13 11 10 8 10 4Z" />
+    <circle cx="19" cy="6" r="1.8" />
+  </svg>
+);
+
+const TYPING_PHRASES = [
+  'geospatial ML systems',
+  'full-stack AI products',
+  'data pipelines on Azure',
+  'explainable ML models',
+];
+
 const stats = [
   { icon: <Code2 size={15} />, label: 'Open Source Repos', value: '20+' },
   { icon: <Award size={15} />, label: 'Live Products', value: '7' },
@@ -17,12 +42,9 @@ export default function Hero() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   // One fixed headline role (AI/ML Engineer). The typing line only varies WHAT I build.
-  const typingText = useTypingEffect([
-    'geospatial ML systems',
-    'full-stack AI products',
-    'data pipelines on Azure',
-    'explainable ML models',
-  ], 120, 70, 1600);
+  const typed = useTypingEffect(TYPING_PHRASES, 120, 70, 1600);
+  // With reduced motion on, show one static phrase instead of the typing loop.
+  const typingText = reduced ? TYPING_PHRASES[0] : typed;
 
   // Close resume menu when clicking outside
   useEffect(() => {
@@ -82,16 +104,16 @@ export default function Hero() {
             I build{' '}
             <span className="font-accent italic font-normal text-xl sm:text-2xl md:text-3xl text-[var(--text)]">
               {typingText}
-              <span className="inline-block w-0.5 h-6 ml-1 bg-[var(--text)] align-middle animate-pulse" />
+              {!reduced && <span className="inline-block w-0.5 h-6 ml-1 bg-[var(--text)] align-middle animate-pulse" aria-hidden="true" />}
             </span>
           </p>
 
           {/* Summary */}
           <p className="mb-4 max-w-lg text-sm leading-relaxed text-[var(--muted)]">
-            Former AI/ML Engineer Intern at <span className="font-semibold text-[var(--text)]">EY</span>. AI products across{' '}
+            AI/ML Engineer and full-stack builder. Former <span className="font-semibold text-[var(--text)]">EY</span> intern, developing intelligent applications across{' '}
             <span className="font-semibold text-[var(--text)]">EdTech</span>,{' '}
-            <span className="font-semibold text-[var(--text)]">HealthTech</span> and{' '}
-            <span className="font-semibold text-[var(--text)]">Geospatial ML</span>, built end to end.
+            <span className="font-semibold text-[var(--text)]">HealthTech</span>, and{' '}
+            <span className="font-semibold text-[var(--text)]">Geospatial AI</span>.
           </p>
 
           {/* Core Product Philosophy Tagline */}
@@ -171,7 +193,7 @@ export default function Hero() {
 
         {/* ── Right Column: Portrait with orbital ring & badges ── */}
         <motion.div
-          className="hero-portrait w-full lg:w-5/12 flex justify-center items-center"
+          className="hero-portrait w-full lg:w-5/12 flex flex-col justify-center items-center mt-6 lg:mt-0"
           initial={reduced ? false : { opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.15 }}
@@ -187,39 +209,35 @@ export default function Hero() {
 
             <div className="relative h-56 w-56 sm:h-64 sm:w-64 md:h-80 md:w-80 overflow-hidden rounded-full border-2 border-[var(--line-strong)] bg-black/40 shadow-2xl">
               <img
-                src="/pic.jpg"
+                src="/Pic.webp"
+                width={800}
+                height={937}
+                decoding="async"
                 alt="Portrait of Jiyanshu Jain"
-                className="h-full w-full object-cover object-[center_32%] transition-transform duration-500 hover:scale-105"
+                className="h-full w-full object-cover object-[center_20%] transition-transform duration-500 hover:scale-105"
               />
             </div>
 
-            <motion.div
-              className="hero-badge absolute -top-3 -left-3 sm:-left-6 flex items-center gap-2.5 rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)]/95 px-3.5 py-2.5 backdrop-blur-md shadow-xl cursor-pointer"
-              initial={reduced ? false : { opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              whileHover={{ scale: 1.08, y: -4, borderColor: 'var(--accent)', boxShadow: '0 8px 24px var(--accent-soft)' }}
-            >
-              <span className="text-lg">💼</span>
-              <div className="text-left">
-                <p className="mono text-xs font-semibold text-[var(--accent-text)] leading-tight">EY · Completed May 2026</p>
-                <p className="text-xs font-bold text-[var(--text)] leading-tight mt-0.5">AI/ML Engineer Intern</p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="hero-badge absolute -bottom-3 -right-3 sm:-right-6 flex items-center gap-2.5 rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)]/95 px-3.5 py-2.5 backdrop-blur-md shadow-xl cursor-pointer"
+            {/* Floating Orbital Badge Attached to Photo (Both Mobile & Desktop) */}
+            <motion.button
+              type="button"
+              onClick={scrollToExperience}
+              className="hero-badge flex absolute -bottom-5 sm:-bottom-8 -right-3 sm:-right-9 items-center gap-2 sm:gap-2.5 rounded-xl sm:rounded-2xl border border-[var(--line-strong)] bg-[var(--panel)] px-3.5 sm:px-4 py-2 sm:py-2.5 backdrop-blur-xl shadow-2xl cursor-pointer text-left focus-ring"
               initial={reduced ? false : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
               whileHover={{ scale: 1.08, y: -4, borderColor: 'var(--accent)', boxShadow: '0 8px 24px var(--accent-soft)' }}
+              title="Click to view Experience section"
+              aria-label="View EY experience in Experience section"
             >
-              <span className="text-lg">🏅</span>
+              <SparklesIcon size={18} className="text-[var(--accent)] shrink-0" />
               <div className="text-left">
-                <p className="mono text-xs font-semibold text-[var(--muted)] leading-tight">Oracle Certified</p>
-                <p className="text-xs font-bold text-[var(--text)] leading-tight mt-0.5">OCI Data Science</p>
+                <p className="mono text-[11px] sm:text-xs font-semibold text-[var(--accent-text)] leading-tight">EY · Completed May 2026</p>
+                <p className="text-xs font-bold text-[var(--text)] leading-tight mt-0.5 flex items-center gap-1">
+                  AI/ML Engineer Intern <span className="text-[var(--accent)] text-[10px] sm:text-[11px]">→</span>
+                </p>
               </div>
-            </motion.div>
+            </motion.button>
           </div>
         </motion.div>
       </div>

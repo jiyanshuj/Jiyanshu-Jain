@@ -315,7 +315,7 @@ export default function Skills({ selectedSkill, onSelectSkill, onClearSkill }: S
               <span className="section-label">Skills</span>
               <h2 id="skills-heading" className="h2">Technical skills</h2>
               <p className="mt-1.5 mono text-xs sm:text-sm font-semibold text-[var(--accent-text)]">
-                Every skill here has a project behind it
+                Select a skill to see the projects that use it
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -408,7 +408,7 @@ export default function Skills({ selectedSkill, onSelectSkill, onClearSkill }: S
                       {/* Bottom Footer Info */}
                       <div className="flex items-center justify-between border-t border-[var(--line)] pt-1.5">
                         <span className="mono text-xs text-[var(--muted)]">
-                          {linkedCount > 0 ? `${linkedCount} project${linkedCount === 1 ? '' : 's'}` : 'Core skill'}
+                          {linkedCount > 0 ? `${linkedCount} project${linkedCount === 1 ? '' : 's'}` : 'Working knowledge'}
                         </span>
                         <span className="mono text-xs font-semibold text-[var(--text)] group-hover:text-[var(--accent-text)]">
                           View →

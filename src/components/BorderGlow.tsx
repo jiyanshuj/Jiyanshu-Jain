@@ -1202,9 +1202,9 @@ export const LiquidSculptureBackground: FC = () => {
    Complete 3D Hinged Folder, PRNG Noise Art, Frosted Glass & Files
 ───────────────────────────────────────────────────────────── */
 
-export type ArtPreset = 'aurora' | 'ember' | 'dusk' | 'glacier' | 'verdant';
+type ArtPreset = 'aurora' | 'ember' | 'dusk' | 'glacier' | 'verdant';
 
-export type ArtRecipe = {
+type ArtRecipe = {
   style: 'marble' | 'streak';
   colors: string[];
   scale?: number;
@@ -1214,9 +1214,9 @@ export type ArtRecipe = {
   veins?: number;
 };
 
-export type FolderArt = ArtPreset | ArtRecipe | 'none';
+type FolderArt = ArtPreset | ArtRecipe | 'none';
 
-export type FolderFile = {
+type FolderFile = {
   name: string;
   meta?: string;
   art?: ArtPreset | ArtRecipe;
@@ -1224,13 +1224,13 @@ export type FolderFile = {
   href?: string;
 };
 
-export type FolderMenuItem = {
+type FolderMenuItem = {
   label: string;
   onSelect?: () => void;
   danger?: boolean;
 };
 
-export type GlassFolderProps = {
+type GlassFolderProps = {
   label?: string;
   meta?: string;
   tone?: 'light' | 'dark';
@@ -1377,7 +1377,7 @@ function makeFbm(seed: number): (x: number, y: number, octaves: number) => numbe
   };
 }
 
-export type ArtJob = {
+type ArtJob = {
   width: number;
   height: number;
   pixels: Uint8ClampedArray;
@@ -1642,7 +1642,7 @@ const FRONT_PATH =
 
 const MAX_VISIBLE = 4;
 
-export const GlassFolder: FC<GlassFolderProps> = ({
+const GlassFolder: FC<GlassFolderProps> = ({
   label = 'My Files',
   meta,
   tone = 'light',
@@ -2052,17 +2052,23 @@ export const FolderCard: FC<{
   className?: string;
 }> = ({ categoryTitle, countLabel, items, artPreset = 'aurora', className = '' }) => {
   const theme = useSiteTheme();
-  const [folderWidth, setFolderWidth] = useState(330);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [folderWidth, setFolderWidth] = useState(300);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (typeof window !== 'undefined') {
-        setFolderWidth(Math.min(330, Math.max(270, window.innerWidth - 32)));
+    const el = containerRef.current;
+    if (!el) return;
+    const updateWidth = () => {
+      const available = el.clientWidth;
+      if (available > 0) {
+        // Size proportionally to the grid column so it never overflows or clips
+        setFolderWidth(Math.min(340, Math.max(220, available)));
       }
     };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateWidth();
+    const ro = new ResizeObserver(updateWidth);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   const files: FolderFile[] = items.map((item, i) => ({
@@ -2074,7 +2080,7 @@ export const FolderCard: FC<{
   }));
 
   return (
-    <div className={`flex justify-center max-w-full overflow-hidden ${className}`}>
+    <div ref={containerRef} className={`w-full flex justify-center ${className}`}>
       <GlassFolder
         label={categoryTitle}
         meta={countLabel}
@@ -2378,18 +2384,18 @@ canvas.gf-sheet-art[data-ready] { opacity: 1; filter: none; }
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  max-width: 200px;
+  gap: 3px;
+  max-width: 290px;
   pointer-events: none;
   color: var(--gf-ink);
 }
-.gf-root[data-place="bottom-left"] .gf-label { left: 28px; bottom: 32px; }
-.gf-root[data-place="top-left"] .gf-label { left: 28px; top: 34px; }
-.gf-root[data-place="top-right"] .gf-label { right: 32px; top: 52px; align-items: flex-start; }
+.gf-root[data-place="bottom-left"] .gf-label { left: 24px; bottom: 26px; }
+.gf-root[data-place="top-left"] .gf-label { left: 24px; top: 30px; }
+.gf-root[data-place="top-right"] .gf-label { right: 28px; top: 48px; align-items: flex-start; }
 .gf-title {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1.15;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
   letter-spacing: -.012em;
   overflow: hidden;
   text-overflow: ellipsis;

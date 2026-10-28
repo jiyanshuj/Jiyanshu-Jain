@@ -63,10 +63,15 @@ export default function Footer() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(contact.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(contact.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      // Clipboard can be blocked (insecure context, permissions). Fall back to opening the mail app.
+      window.location.href = `mailto:${contact.email}`;
+    }
   };
 
   return (

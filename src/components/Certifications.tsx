@@ -316,7 +316,7 @@ const folderVaults = [
     ] as FolderItem[],
   },
   {
-    categoryTitle: 'Oracle & Data Science Dossier',
+    categoryTitle: 'Oracle & Data Science',
     artPreset: 'ember' as const,
     items: [
       {
@@ -388,7 +388,7 @@ const folderVaults = [
     ] as FolderItem[],
   },
   {
-    categoryTitle: 'Published Research & Hackathons',
+    categoryTitle: 'Published Research & Papers',
     artPreset: 'verdant' as const,
     items: [
       {
@@ -659,7 +659,7 @@ export default function Certifications() {
           </div>
 
           {/* 4 Interactive 3D Glass Dossier Folders */}
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 justify-items-center py-6">
+          <div className="grid gap-5 sm:gap-6 lg:gap-5 xl:gap-8 sm:grid-cols-2 lg:grid-cols-4 justify-items-center py-6">
             {folderVaults.map((vault) => (
               <FolderCard
                 key={vault.categoryTitle}

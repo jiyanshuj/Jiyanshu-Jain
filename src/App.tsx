@@ -13,17 +13,21 @@ const Certifications = React.lazy(() => import('./components/Certifications'));
 const Footer = React.lazy(() => import('./components/Footer'));
 
 type Theme = 'light' | 'dark';
-// v4 key: any dark preference saved by earlier redesigns is ignored once, so a fresh visit is light.
-const THEME_STORAGE_KEY = 'jiyanshu-theme-v4';
-const LEGACY_THEME_STORAGE_KEYS = ['jiyanshu-theme', 'portfolio-theme-v2', 'jiyanshu-theme-v3'];
+const THEME_STORAGE_KEY = 'jiyanshu-theme-v5';
+
+function getSystemTheme(): Theme {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return 'light';
+}
 
 function getInitialTheme(): Theme {
   try {
     const saved = localStorage.getItem(THEME_STORAGE_KEY);
     if (saved === 'light' || saved === 'dark') return saved;
-    LEGACY_THEME_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
-  } catch { /* storage blocked: fall through to light */ }
-  return 'light';
+  } catch { /* storage blocked: fall through to system */ }
+  return getSystemTheme();
 }
 
 function App() {
@@ -35,15 +39,68 @@ function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.classList.toggle('dark', theme === 'dark');
-    try { localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* ignore */ }
   }, [theme]);
+
+  // Listen to system theme changes if user has not manually set a preference
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      try {
+        const saved = localStorage.getItem(THEME_STORAGE_KEY);
+        if (!saved) {
+          setTheme(e.matches ? 'dark' : 'light');
+        }
+      } catch {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    };
+    mediaQuery.addEventListener('change', handleSystemThemeChange);
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
+  }, []);
 
   useEffect(() => {
     const ready = Promise.race([document.fonts?.ready ?? Promise.resolve(), new Promise((resolve) => setTimeout(resolve, 650))]);
     ready.then(() => setLoading(false));
   }, []);
 
-  const toggleTheme = () => setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+  // Sections are lazy-loaded, so a link like /#contact has no target when the page first paints.
+  // Wait for the target to mount, then jump to it (instant, so it does not animate from the top).
+  useEffect(() => {
+    const raw = window.location.hash.slice(1);
+    if (!raw || raw === 'top') return;
+    let id = raw;
+    try { id = decodeURIComponent(raw); } catch { /* keep raw */ }
+
+    const jump = () => {
+      const el = document.getElementById(id);
+      if (!el) return false;
+      el.scrollIntoView({ behavior: 'instant' as ScrollBehavior, block: 'start' });
+      return true;
+    };
+    if (jump()) return;
+
+    const observer = new MutationObserver(() => {
+      if (jump()) {
+        observer.disconnect();
+        window.clearTimeout(giveUp);
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    const giveUp = window.setTimeout(() => observer.disconnect(), 6000);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(giveUp);
+    };
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((current) => {
+      const next = current === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem(THEME_STORAGE_KEY, next); } catch { /* ignore */ }
+      return next;
+    });
+  };
 
   return (
     <>

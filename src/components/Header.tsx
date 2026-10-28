@@ -46,7 +46,11 @@ export default function Header({ theme, onThemeToggle }: HeaderProps) {
     };
   }, [mobileOpen]);
 
+  // Most sections are React.lazy, so they are not in the DOM yet when this effect first runs.
+  // Observe whatever exists now, then keep watching the DOM and pick up the rest as they mount.
   useEffect(() => {
+    const ids = ['top', ...navLinks.map((link) => link.id)];
+    const observed = new Set<string>();
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -55,11 +59,35 @@ export default function Header({ theme, onThemeToggle }: HeaderProps) {
       },
       { rootMargin: '-30% 0px -60% 0px' }
     );
-    ['top', ...navLinks.map((link) => link.id)].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+
+    // Returns true once every nav target is being observed.
+    const observeAvailable = () => {
+      ids.forEach((id) => {
+        if (observed.has(id)) return;
+        const el = document.getElementById(id);
+        if (el) {
+          observer.observe(el);
+          observed.add(id);
+        }
+      });
+      return observed.size === ids.length;
+    };
+
+    let mutationObserver: MutationObserver | null = null;
+    if (!observeAvailable()) {
+      mutationObserver = new MutationObserver(() => {
+        if (observeAvailable()) {
+          mutationObserver?.disconnect();
+          mutationObserver = null;
+        }
+      });
+      mutationObserver.observe(document.body, { childList: true, subtree: true });
+    }
+
+    return () => {
+      mutationObserver?.disconnect();
+      observer.disconnect();
+    };
   }, []);
 
   const themeLabel = `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`;
@@ -100,7 +128,7 @@ export default function Header({ theme, onThemeToggle }: HeaderProps) {
               <a
                 key={link.id}
                 href={`#${link.id}`}
-                aria-current={active ? 'true' : undefined}
+                aria-current={active ? 'location' : undefined}
                 className={`focus-ring relative whitespace-nowrap px-3 py-1.5 text-xs font-semibold no-underline transition-colors ${
                   active
                     ? 'text-[var(--text)]'
